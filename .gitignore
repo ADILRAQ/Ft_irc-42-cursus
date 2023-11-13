@@ -1,0 +1,8 @@
+# Obj files
+*.o
+
+# VSCode workspace setting
+.vscode/
+
+# macOS file
+.DS_Store
