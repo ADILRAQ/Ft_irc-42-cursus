@@ -6,19 +6,18 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/13 18:13:57 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/14 16:59:53 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(std::string const &port) : address(NULL), SSize(1)
+Server::Server(std::string const &port) : address(NULL)
 {
 	Addrinfo	hints;
 	int			error;
 	Pollfd		help;
 
-	// this->Initialize();
 	memset(&hints, '\0', sizeof(struct addrinfo));
 
 	hints.ai_family = PF_INET;
@@ -39,6 +38,7 @@ Server::Server(std::string const &port) : address(NULL), SSize(1)
 	help.events = POLLIN;
 	help.revents = 0;
 	Sockets.push_back(help);
+	Request.push_back("");
 	this->NonBlockMode();
 }
 
@@ -62,29 +62,26 @@ void	Server::Revents(void)
 
 void	Server::NonBlockMode(void)
 {
-	int	flag;
-
-	if ((flag = fcntl(Sockets[0].fd, F_GETFL, 0)) == -1)
+	if (fcntl(Sockets[0].fd, F_SETFL, O_NONBLOCK) == -1)
 	{
-		perror("fcntl1 ");
-		throw (-1);
-	}
-	if (fcntl(Sockets[0].fd, F_SETFL, flag | O_NONBLOCK) == -1)
-	{
-		perror("fcntl2 ");
+		perror("fcntl ");
 		throw (-1);
 	}
 }
 
 int Server::operator [] (unsigned int i)
 {
-	std::cout << "HII: " << Sockets[i].fd << std::endl;
 	return (Sockets[i].fd);
 }
 
 short	Server::operator [] (int i)
 {
 	return (Sockets[i].revents);
+}
+
+std::string	&Server::operator [] (long i)
+{
+	return (Request[i]);
 }
 
 int	Server::getSize(void) const
@@ -118,7 +115,7 @@ void	Server::SListen(void)
 int	Server::SPoll(void)
 {
 	this->Revents();
-	return (poll(Sockets.data(), Sockets.size(), 0));
+	return (poll(Sockets.data(), Sockets.size(), -1));
 }
 
 void	Server::SAccept(void)
@@ -128,13 +125,9 @@ void	Server::SAccept(void)
 	int			newSocket;
 	Pollfd		help;
 
-	/**
-		*! Be carefule
-	*/
 	if (Sockets.size() <= SIZE)
 	{
-		std::cout << "new connection accepted!" << std::endl;
-		// TODO: We can Store new Connection's data
+		// TODO: We can Store new Connection's data as IP/Port etc...
 		newSocket = accept(Sockets[0].fd, (struct sockaddr *)&inData, &sizeStruct);
 		if (newSocket < 0)
 		{
@@ -146,7 +139,15 @@ void	Server::SAccept(void)
 		help.events = POLLIN;
 		help.revents = 0;
 		Sockets.push_back(help);
+		Request.push_back("");
 	}
 	else
 		std::cout << "Connection Not Accepeted!" << std::endl;
+}
+
+void	Server::SClose(int i)
+{
+	std::cout << "Delete: " << (Sockets.begin() + i)->fd << std::endl;
+	close(Sockets[i].fd);
+	Sockets.erase(Sockets.begin() + i);
 }

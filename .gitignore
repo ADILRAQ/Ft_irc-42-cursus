@@ -1,6 +1,9 @@
 # Obj files
 *.o
 
+# Exec
+ircserv
+
 # VSCode workspace setting
 .vscode/
 

@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/13 18:59:00 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/14 18:04:49 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	startServer(char *port, char *pswd)
 {
 	Server	serv(port);
+	char	req[REQUEST_SIZE];
 	int		check;
+	int		status;
 	(void)pswd;
 
 	serv.SBind();
@@ -36,14 +38,30 @@ void	startServer(char *port, char *pswd)
 					serv.SAccept();
 				else if (serv[(short)i] & POLLIN)
 				{
-					// TODO: Read data an Parse
-					char	buff[100];
-					memset(buff, '\0', 100);
 					std::cout << "Ready to be read!" << std::endl;
-					std::cout << "REC: " << recv((int)serv[(unsigned int)i], buff, 100, 0) << std::endl;
-					// perror("--> ");
-					std::cout << "InDATA: " << buff << std::endl;
-					throw (-1);
+					memset(req, '\0', REQUEST_SIZE);
+					if ((status = recv(serv[(unsigned int)i], req, REQUEST_SIZE, 0)) == -1)
+					{
+						perror("RECV ");
+						throw (-1);
+					}
+					else if (status)
+					{
+						std::string	message(req);
+						serv[(long)i] += message;
+						std::cout << "\t-->" << serv[(long)i] << std::endl;
+						if (serv[(long)i].find('\n') != std::string::npos)
+						{
+							// TODO: Send serv[(long)i] to get parsed
+							serv[(long)i].clear();
+							serv[(long)i].resize(0);
+						}
+					}
+					else
+					{
+						std::cout << "Closed: " << serv[(unsigned int)i] << std::endl;
+						serv.SClose(i);
+					}
 				}
 			}
 		}
