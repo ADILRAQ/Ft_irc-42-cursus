@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 10:06:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/12 13:10:22 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/15 09:58:23 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,20 @@ static int	Password(char *str)
 	return (1);
 }
 
+void	signalHandler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		std::cout << "\rExit successfully : Receiving SIGINT..." << std::endl;
+		exit(EXIT_SUCCESS);
+	}
+	if (sig == SIGQUIT)
+	{
+		std::cout << "\rExit unsuccessfully : Receiving SIGQUIT..." << std::endl;
+		exit(EXIT_FAILURE);
+	}
+}
+
 int	main(int ac, char **av)
 {
 	if (ac == 3)
@@ -47,6 +61,8 @@ int	main(int ac, char **av)
 		if (Port(av[1]) && Password(av[2]))
 		{
 			try {
+				signal(SIGINT, signalHandler);
+				signal(SIGQUIT, signalHandler);
 				startServer(av[1], av[2]);
 			}
 			catch(int){}

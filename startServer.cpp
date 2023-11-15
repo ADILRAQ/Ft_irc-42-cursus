@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/14 18:04:49 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/15 09:36:38 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	startServer(char *port, char *pswd)
 					{
 						std::string	message(req);
 						serv[(long)i] += message;
-						std::cout << "\t-->" << serv[(long)i] << std::endl;
 						if (serv[(long)i].find('\n') != std::string::npos)
 						{
+							std::cout << "\t-->" << serv[(long)i] << std::endl;
 							// TODO: Send serv[(long)i] to get parsed
 							serv[(long)i].clear();
 							serv[(long)i].resize(0);

@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/14 16:59:53 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/15 09:39:19 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,4 +150,5 @@ void	Server::SClose(int i)
 	std::cout << "Delete: " << (Sockets.begin() + i)->fd << std::endl;
 	close(Sockets[i].fd);
 	Sockets.erase(Sockets.begin() + i);
+	Request.erase(Request.begin() + i);
 }
