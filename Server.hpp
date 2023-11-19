@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:48:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/14 16:57:56 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/19 10:05:39 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <iostream>
 #include <sstream>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 #include <poll.h>
 #include <netdb.h>
 #include <unistd.h>

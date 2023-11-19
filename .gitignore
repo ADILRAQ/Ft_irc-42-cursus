@@ -10,3 +10,6 @@ a.out
 
 # macOS file
 .DS_Store
+
+# JSON files
+*.json

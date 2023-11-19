@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/15 09:39:19 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/19 10:38:48 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,9 @@ void	Server::SAccept(void)
 		help.revents = 0;
 		Sockets.push_back(help);
 		Request.push_back("");
+		struct sockaddr_in	test;
+		memcpy(&test.sin_addr, &inData, inData.ss_len);
+		std::cout << "IN_IP: " << inet_ntoa(test.sin_addr) << std::endl;
 	}
 	else
 		std::cout << "Connection Not Accepeted!" << std::endl;
