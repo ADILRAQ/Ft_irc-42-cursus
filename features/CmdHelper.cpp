@@ -1,0 +1,208 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CmdHelper.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
+/*   Updated: 2023/11/24 10:12:50 by fraqioui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include"Cmd.hpp"
+
+void    checkWhitespaces(string & s, bool & flg, const string & nick)
+{
+    for (unsigned int i(0); i < s.length(); i++)
+    {
+        if (!i && s[i] == ' ')
+            break ;
+        if (s[i] == ':')
+        {
+            flg = true;
+            return ;
+        }
+        if (s[i] == ' ' && i + 1 < s.length() && s[i + 1] == ' ')
+            break ;
+        if (i == s.length() - 1)
+            return ;
+    } 
+    throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+}
+
+cmdInfos    placeParams(string & cmd, const string & nick)
+{
+    cmdInfos        params;
+    vector<string>  save;
+    string          toStr;
+    string          Split;
+    string          NSplit;
+    bool             flg(0);
+
+    checkWhitespaces(cmd, flg, nick);
+    if (flg)
+    {
+        istringstream   in(cmd);
+        getline(in, cmd, ':');
+        getline(in, NSplit);
+        NSplit.insert(NSplit.begin(), ':');
+    }
+    istringstream   instr(cmd);
+    for (int check(0); getline(instr, toStr, ' '); )
+    {
+        if (!check)
+        {
+            params.first = toStr;
+            check++;
+            continue ;
+        }
+        save.push_back(toStr);
+    }
+    if (flg)
+        save.push_back(NSplit);
+    params.second = save;
+    std::cout << "********** print data **********\n";
+    std::cout << "cmd: " << params.first << '\n';
+    for (unsigned int i(0); i < params.second.size(); i++)
+        std::cout << '\'' << params.second[i] << "\' ";
+    std::cout << "\n********** End **********\n";
+    return params;
+}
+
+void    placeCmds(string & cmd, int fd)
+{
+    cmdInfos    obj;
+    ClientInfos clients = Client::getClient();
+
+    try
+    {
+        obj = placeParams(cmd, clients[fd].first);
+    }
+    catch(const exception & e)
+    {
+        _send(fd, e.what());
+    }
+    Cmd command(obj, fd);
+    command.executeCmd(clients[fd].first);
+}
+
+/*********************************** Commands Syntax *****************************************/
+
+int    ValidString(const string s)
+{
+    int i = 0;
+
+    for (; i < int(s.length()); i++)
+    {
+        if (s[i] <= 32 || s[i] == 44 || s[i] == 58 || s[i] >= 127)
+            return -1;
+    }
+    return i;
+} 
+
+void    checkParamsUser(const vector<string> & vc, const string & nick)
+{
+    if (vc.size() != 1 || vc[0].empty())
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+
+    unsigned int i = 0;
+    for (; i < vc[0].length(); i++)
+        if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
+            throw runtime_error(": 432" + nick + " :Non valid character\r\n");
+
+    if (i > 9)
+        throw runtime_error(": 432 " + nick + " :Passed the valid length\r\n");
+}
+
+void    checkParamsNick(const vector<string> & vc)
+{
+    if (vc.size() != 1 || vc[0].empty())
+        throw runtime_error(": 461 :Not enough parameters\r\n");
+
+    unsigned int i = 0;
+    for (; i < vc[0].length(); i++)
+        if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
+            throw runtime_error(": 432" + vc[0] + " :Non valid character(s)\r\n");
+
+    if (i > 9)
+        throw runtime_error(": 432 " + vc[0] + " :Passed the valid length\r\n");
+}
+
+unsigned int    checkChannel(const vector<string> & vc, const string & nick)
+{
+    unsigned int sz = vc.size();
+    if (sz != 1 && sz != 2)
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+
+    if (vc[0].empty() || vc[0][0] != '#' || (sz == 2 && vc[1].empty()))
+        throw runtime_error(": 403" + vc[0] + " :No such channel\r\n");
+
+    int i = ValidString(vc[0]);
+    if (i < 0 || i > 50)
+        throw runtime_error(": 403" + vc[0] + " :No such channel\r\n");
+    return sz;
+}
+
+unsigned int    checkTopic(const vector<string> & vc, const string & nick)
+{
+    unsigned int sz = vc.size();
+
+    if (sz != 1 && sz != 2)
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+
+    if (vc[0].empty() || (sz == 2 && (vc[1].empty() || vc[1][0] != ':')))
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+    if (sz == 2 && ValidString(vc[1]) < 0)
+        throw runtime_error(": 432 " + nick + " :Non valid character(s)\r\n");
+    return sz;
+}
+
+void    checkKey(string key, const string & nick)
+{
+    for (unsigned int i(0); i < key.length(); i++)
+        if (!isalpha(key[i]))
+            throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+}
+
+void    checkLimit(string limit, const string & nick)
+{
+    for (unsigned int i(0); i < limit.length(); i++)
+        if (!isdigit(limit[i]))
+            throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+}
+
+char    checkMode(const vector<string> & vc, const string & nick)
+{
+    unsigned int sz = vc.size();
+    if ((sz != 2 && sz != 3) || (vc[0].empty() || vc[1].empty() || (sz == 3 && vc[2].empty())))
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+    
+    if (vc[1].length() != 2 || (vc[1][0] != '-' && vc[1][0] != '+') || (vc[1][1] != 'i' && vc[1][1] != 't' && vc[1][1] != 'k' && vc[1][1] != 'o' && vc[1][1] != 'l'))
+        throw runtime_error(": 501 " + nick + " :Unknown MODE flag");
+
+    if (sz == 2 && (vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+
+    if (sz == 3 && !(vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+
+    if (vc[1][1] == 'k')
+        checkKey(vc[2], nick);
+
+    if (vc[1][1] == 'l')
+        checkLimit(vc[2], nick);
+    
+    return vc[1][1];
+}
+
+void    toLowerString(string & s)
+{
+    for (unsigned int i(0); i < s.length(); i++)
+        s[i] = tolower(s[i]);
+}
+
+void _send(int fd, string mess)
+{
+    send(fd, mess.c_str(), mess.length(), 0);
+}
