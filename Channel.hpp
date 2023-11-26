@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:52 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 09:12:17 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:15:21 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ public:
         void    setChannelLimit(const int & L);
         void    setTopic(const string & T);
         void    setMember(const string & mem, const int & fd);
-        void    removeMember(const string & name);
         void    setModesStat(char index, bool flg, string param);
+        void    setChannelOper(string & mmbr, bool Set);
+        void    removeClient(string & nm);
 };
 
 class Channel
@@ -56,12 +57,12 @@ public:
         Channel();
         ~Channel();
 
-        static void setChannel(const Chan & add);
-        static const vector<Chan> & getChannel();
+        static void setChannel(Chan & add);
+        static vector<Chan> & getChannel();
 };
 
 /************************ Get Channels Data && Checking *************************/
 
-unsigned int    ChannelExist(vector<Chan>& CurrentChannels, string & Name);
+unsigned int    ChannelExist(vector<Chan>& CurrentChannels, string & Name, string & client);
 void            IsInChannel(Chan& CurrentChannel, int fd, bool flg);
-void            IsUserInChannel(Chan& CurrentChannel, string & Name);
+void            IsUserInChannel(Chan& CurrentChannel, string & Name, bool flg);

@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:47 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 09:12:28 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:41:38 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ Channel::~Channel()
 
 }
 
-void Channel::setChannel(const Chan & add)
+void Channel::setChannel(Chan & add)
 {
     channel.push_back(add);
 }
 
-const vector<Chan> & Channel::getChannel()
+vector<Chan> & Channel::getChannel()
 {
     return channel;
 }
@@ -110,55 +110,80 @@ void    Chan::setChannelLimit(const int & L)
     ChannelLimit = L;
 }
 
-void    Chan::removeMember(const string & name)
+void    Chan::setChannelOper(string & mmbr, bool Set)
 {
-    members.erase(members.find(name));
-    map<int, string>::iterator it = LookForUser.begin();
-    map<int, string>::iterator ite = LookForUser.end();
-    for (map<int, string>::iterator t = it; t != ite; t++)
+    members[mmbr].second = Set;
+}
+
+void Chan::removeClient(string & nm)
+{
+    members.erase(members.find(nm));
+    map<int, string>::iterator t = LookForUser.begin();
+    map<int, string>::iterator te = LookForUser.end();
+    for (map<int, string>::iterator i = t; i != te; i++)
     {
-        if (it->second == name)
+        if (nm == i->second)
         {
-            LookForUser.erase(it);
-            break ;
+            LookForUser.erase(i);
+            return ;
         }
     }
 }
 
-unsigned int    ChannelExist(vector<Chan>& CurrentChannels, string & Name)
+unsigned int    ChannelExist(vector<Chan>& CurrentChannels, string & Name, string & client)
 {
     unsigned int c(0), sz = CurrentChannels.size();
 
     toLowerString(Name);
     if (!sz)
-        throw runtime_error("403\n");
+        throw runtime_error(":ircserv 403 " + client + " :No such channel\r\n");
+
     for (; c < sz; c++)
     {
         if (CurrentChannels[c].getChannelName() == Name)
             break ;
         if (c == sz - 1)
-            throw runtime_error("403\n");
+            throw runtime_error(":ircserv 403 " + client + " :No such channel\r\n");
     }
     return c;
 }
 
 void    IsInChannel(Chan& CurrentChannel, int fd, bool flg)
 {
-    map<int, string> trav = CurrentChannel.getMembersFromFD();
+    map<int, string> &trav = CurrentChannel.getMembersFromFD();
+    memberInfo &back_insert_iterator = CurrentChannel.getMembers();
+    ClientInfos client = Client::getClient();
+    cout << "tracking -------**********\n";
+    memberInfo::iterator it = back_insert_iterator.begin();
+    memberInfo::iterator ite = back_insert_iterator.end();
+    for (memberInfo::iterator t = it; t != ite; t++)
+    {
+        cout << t->first << "  "<<t->second.first<<'\n';
+    }
     if (trav.find(fd) == trav.end())
-        throw runtime_error("442\n");
+        throw runtime_error(":ircserv 442 " + client[fd].second.first + " :You're not on that channel\r\n");
 
     if (flg)
     {
         memberInfo meM = CurrentChannel.getMembers();
+        cout <<"why " << meM[trav[fd]].second << "\n";
         if (!(meM[trav[fd]].second))
-            throw runtime_error("482\n");
+            throw runtime_error(":ircserv 482 " + trav[fd] + " :You're not channel operator\r\n");
     }
 }
 
-void    IsUserInChannel(Chan& CurrentChannel, string & Name)
+void    IsUserInChannel(Chan& CurrentChannel, string & Name, bool flg)
 {
     memberInfo trav = CurrentChannel.getMembers();
-    if (trav.find(Name) != trav.end())
-        throw runtime_error("443\n");
+
+    if (trav.find(Name) == trav.end())
+    {
+        if (flg)
+            throw runtime_error(":ircserv 441 " + Name + " :They aren't on that channel\r\n");
+    }
+    else
+    {
+        if (!flg)
+            throw runtime_error(":ircserv 443 " + Name + " :is already on channel\r\n");
+    }
 }

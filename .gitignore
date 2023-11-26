@@ -1,0 +1,15 @@
+# Obj files
+*.o
+
+# Exec
+ircserv
+a.out
+
+# VSCode workspace setting
+.vscode/
+
+# macOS file
+.DS_Store
+
+# JSON files
+*.json

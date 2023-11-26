@@ -5,9 +5,9 @@ CC = c++
 FLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -rf
 
-FILES = main Channel Client features/Cmd features/CmdHelper features/INVITE features/JOIN features/KICK features/MODE features/NICK features/PASS features/QUIT features/TOPIC features/USER
+FILES = IRC Server startServer Channel Client features/Cmd features/CmdHelper features/INVITE features/JOIN features/KICK features/MODE features/NICK features/PASS features/QUIT features/TOPIC features/USER
 
-HEADERS = features/cmd.hpp Client.hpp Channel.hpp
+HEADERS = MainHeader.hpp Server.hpp features/cmd.hpp Client.hpp Channel.hpp
 
 FOBJ = ${FILES:=.o}
 

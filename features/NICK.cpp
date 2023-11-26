@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:32 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/23 11:39:57 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/24 15:43:22 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,13 @@ void    Cmd::NICK()
         ClientInfos::iterator ite = save.end();
         for (ClientInfos::iterator t = it; t != ite; t++)
         {
-            if (CurrentClientFD != t->first && ((t->second).first == data.second[0]))
-                throw runtime_error(": 433 " + (t->second).second + " :Nickname is already in use\r\n");
+            if (CurrentClientFD != t->first && ((t->second).second.first == data.second[0]))
+                throw runtime_error(":ircserv 433 " + (t->second).second.second + " :Nickname is already in use\r\n");
         }
     }
-    catch(const std::exception& e)
+    catch(const exception& e)
     {
-        throw e;
+        throw runtime_error(e.what());
     }
-    if (save.find(CurrentClientFD) != save.end())
-    {
-        save[CurrentClientFD].first = data.second[0];
-        return ;
-    }
-    Client::setClient(CurrentClientFD, data.second[0], "");
+    Client::getClient()[CurrentClientFD].second.first = data.second[0];
 }

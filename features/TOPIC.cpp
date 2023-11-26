@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 10:11:52 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 18:19:38 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void    Cmd::TOPIC()
 {
-    unsigned int ChannelIndex, sz = checkTopic(data.second, Client::getClient()[CurrentClientFD].first);
+    unsigned int ChannelIndex, sz = checkTopic(data.second, Client::getClient()[CurrentClientFD].second.first);
     vector<Chan>    CurrentChannels = Channel::getChannel();
     bool IsOper;
 
-    try
+    try   
     {
-        ChannelIndex = ChannelExist(CurrentChannels, data.second[0]);
+        ChannelIndex = ChannelExist(CurrentChannels, data.second[0], Client::getClient()[CurrentClientFD].second.first);
         if ((CurrentChannels[ChannelIndex].getModes())['t'].first)
             IsOper = true;
         else
@@ -29,16 +29,16 @@ void    Cmd::TOPIC()
     }
     catch (const exception & e)
     {
-        std::cerr << e.what();
+        runtime_error(e.what());
     }
 
     if (sz == 1)
     {
         if ((CurrentChannels[ChannelIndex].getTopic()).empty())
-            throw runtime_error("331 no topic is set\n");
+            throw runtime_error(":ircserv 331 " + CurrentChannels[ChannelIndex].getMembersFromFD()[CurrentClientFD] + " :No topic is set\r\n");
         else
-            std::cout << CurrentChannels[ChannelIndex].getTopic() << '\n';
+            _send(CurrentClientFD, CurrentChannels[ChannelIndex].getTopic() + "\r\n");
     }
     else
-        CurrentChannels[ChannelIndex].setTopic(data.second[1]);
+        Channel::getChannel()[ChannelIndex].setTopic(data.second[1]);
 }

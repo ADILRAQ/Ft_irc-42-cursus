@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:21 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 09:11:12 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:42:10 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,31 @@ void    Cmd::INVITE()
     unsigned int    ChannelIndex;
 
     if (data.second.size() != 2)
-      std::cout << "461\n";
+      cout << "461\n";
 
     vector<Chan> CurrentChannels = Channel::getChannel();
     ClientInfos CurrentClients = Client::getClient();
 
     try
     {
-        ChannelIndex = ChannelExist(CurrentChannels, data.second[0]);
+        ChannelIndex = ChannelExist(CurrentChannels, data.second[1], Client::getClient()[CurrentClientFD].second.first);
         IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, false);
         if (CurrentClients.find(CurrentClientFD) == CurrentClients.end())
-          throw runtime_error("User does not exist : look for right error\n ");
-        IsUserInChannel(CurrentChannels[ChannelIndex], data.second[0]);
+          throw runtime_error(":ircserv 401 " + data.second[0] + " :No such nick/channel\r\n");
+        IsUserInChannel(CurrentChannels[ChannelIndex], data.second[0], false);
     } 
     catch (const exception & e)
     {
-
+        throw runtime_error(e.what());
     }
+
     ClientInfos::iterator it = CurrentClients.begin();
     ClientInfos::iterator ite = CurrentClients.end();
     ClientInfos::iterator t = it;
     for (; t != ite; t++)
-        if (t->second.first == data.second[0])
+        if (t->second.second.first == data.second[0])
             break ;
-    CurrentChannels[ChannelIndex].setMember(data.second[0], t->first);
+    Channel::getChannel()[ChannelIndex].setMember(data.second[0], t->first);
     //341
 }
 

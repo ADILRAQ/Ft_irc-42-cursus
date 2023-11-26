@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 10:12:10 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:20:00 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,38 +21,44 @@ void    Cmd::MODE()
 
     try
     {
-        FlaG = checkMode(data.second, Client::getClient()[CurrentClientFD].first);
+        FlaG = checkMode(data.second, Client::getClient()[CurrentClientFD].second.first);
         if (data.second[1][0] == '+')
             Set = true;
         else
             Set = false;
-        ChannelIndex = ChannelExist(CurrentChannels, data.second[0]);
+        ChannelIndex = ChannelExist(CurrentChannels, data.second[0], Client::getClient()[CurrentClientFD].second.first);
         IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, true);
     }
     catch (const exception & e)
     {
-        std::cerr << e.what();
+        throw runtime_error(e.what());
     }
 
     switch (FlaG)
     {
         case 'i':
-            CurrentChannels[ChannelIndex].setModesStat(FlaG, Set, "");
+            Channel::getChannel()[ChannelIndex].setModesStat(FlaG, Set, "");
             break;
         case 't':
-            CurrentChannels[ChannelIndex].setModesStat(FlaG, Set, "");
+            Channel::getChannel()[ChannelIndex].setModesStat(FlaG, Set, "");
             break;
         case 'k':
-            CurrentChannels[ChannelIndex].setModesStat(FlaG, Set, data.second[2]);
+            Channel::getChannel()[ChannelIndex].setModesStat(FlaG, Set, data.second[2]);
             break;
         case 'o':
-        // still need work
-            IsUserInChannel(CurrentChannels[ChannelIndex], data.second[2]);
-            CurrentChannels[ChannelIndex].setModesStat(FlaG, Set, data.second[2]);
+            try
+            {
+                IsUserInChannel(Channel::getChannel()[ChannelIndex], data.second[2], true);
+            }
+            catch (const exception & e)
+            {
+                throw runtime_error(e.what());
+            }
+            Channel::getChannel()[ChannelIndex].setChannelOper(data.second[2], Set);
             break;
         case 'l':
-            CurrentChannels[ChannelIndex].setModesStat(FlaG, Set, "");
-            CurrentChannels[ChannelIndex].setChannelLimit(atoi((data.second[2]).c_str()));
+            Channel::getChannel()[ChannelIndex].setModesStat(FlaG, Set, "");
+            Channel::getChannel()[ChannelIndex].setChannelLimit(atoi((data.second[2]).c_str()));
             break;
     }
 }

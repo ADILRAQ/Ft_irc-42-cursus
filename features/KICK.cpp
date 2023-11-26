@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:26 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/22 11:44:27 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:36:28 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,33 @@ void    Cmd::KICK()
 {
     // the reason to kick, don't forget to add
     if (data.second.size() != 2)
-        throw "461\n";
-    
+        throw runtime_error(":ircserv 461 " + Client::getClient()[CurrentClientFD].second.first + " :Not enough parameters\r\n");
+
     unsigned int    ChannelIndex;
     vector<Chan>    CurrentChannels = Channel::getChannel();
-
     try
     {
-        ChannelIndex = ChannelExist(CurrentChannels, data.second[0]);
+        ChannelIndex = ChannelExist(CurrentChannels, data.second[1], Client::getClient()[CurrentClientFD].second.first);
         IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, true);
         memberInfo& keep = CurrentChannels[ChannelIndex].getMembers();
         if (keep.find(data.second[1]) == keep.end())
-            throw runtime_error("ERR_USERNOTINCHANNEL\n");
+            throw runtime_error(":ircserv 441 " + data.second[1] + " :They aren't on that channel\r\n");
     }
     catch (const exception & e)
     {
-        std::cerr << e.what();
-        return ;
+        throw runtime_error(e.what());
     }
-    CurrentChannels[ChannelIndex].removeMember(data.second[1]);
+
+    Channel::getChannel()[ChannelIndex].removeClient(data.second[1]);
             /******/
-            std::cout << "---------- KICK --------------\n";
-             memberInfo& keep = CurrentChannels[ChannelIndex].getMembers();
-        memberInfo::iterator it = keep.begin();
-        memberInfo::iterator ite = keep.end();
+            cout << "---------- KICK " << Channel::getChannel()[ChannelIndex].getChannelName()<< "--------------\n";
+             memberInfo& sv = Channel::getChannel()[ChannelIndex].getMembers();
+        memberInfo::iterator it = sv.begin();
+        memberInfo::iterator ite = sv.end();
         for (memberInfo::iterator t = it; t != ite; t++)
         {
-            std::cout << "first " << t->first << '\n';
+            cout << "first " << t->first << "  " << t->second.first<< '\n';
         }
-        std::cout << "-------------------------\n";
+        cout << "-------------------------\n";
         /*****   */
 }
