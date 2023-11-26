@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:08:36 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 10:21:44 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 09:39:34 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,3 +19,7 @@
 #include <signal.h>
 
 void	startServer(char *port, char *pswd);
+
+// Command
+
+std::string const	Bot(std::string const &request);

@@ -6,29 +6,29 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 13:39:11 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 09:46:06 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(std::string const &port) : address(NULL)
+Server::Server(std::string const &port) : Address(NULL)
 {
 	Addrinfo	hints;
-	int			error;
 	Pollfd		help;
+	int			error;
 
 	memset(&hints, '\0', sizeof(struct addrinfo));
 
 	hints.ai_family = PF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 
-	if ((error = getaddrinfo("localhost", port.c_str(), &hints, &address)))
+	if ((error = getaddrinfo("localhost", port.c_str(), &hints, &Address)))
 	{
 		std::cout << gai_strerror(error) << std::endl;
 		throw (-1);
 	}
-	help.fd = socket(address->ai_family, address->ai_socktype, address->ai_protocol);
+	help.fd = socket(Address->ai_family, Address->ai_socktype, Address->ai_protocol);
 	if (help.fd < 0)
 	{
 		perror("Socket ");
@@ -48,8 +48,8 @@ Server::~Server(void)
 
 	while (i < Sockets.size())
 		close(Sockets[i++].fd);
-	if (address)
-		freeaddrinfo(address);
+	if (Address)
+		freeaddrinfo(Address);
 }
 
 void	Server::Revents(void)
@@ -96,7 +96,7 @@ void	Server::SBind(void)
 	if (setsockopt(Sockets[0].fd, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr)))
 		std::cout << "RESUSE: " << strerror(errno) << std::endl;
 
-	if (bind(Sockets[0].fd, address->ai_addr, address->ai_addrlen) < 0)
+	if (bind(Sockets[0].fd, Address->ai_addr, Address->ai_addrlen) < 0)
 	{
 		perror("Bind ");
 		throw (-1);
@@ -140,9 +140,6 @@ void	Server::SAccept(void)
 		help.revents = 0;
 		Sockets.push_back(help);
 		Request.push_back("");
-		struct sockaddr_in	test;
-		memcpy(&test.sin_addr, &inData, inData.ss_len);
-		std::cout << "IN_IP: " << inet_ntoa(test.sin_addr) << std::endl;
 	}
 	else
 		std::cout << "Connection Not Accepeted!" << std::endl;

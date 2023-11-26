@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 13:38:39 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 09:49:20 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 void	startServer(char *port, char *pswd)
 {
 	Server	serv(port);
-	char	req[REQUEST_SIZE];
+	char	req[BUFFER_SIZE];
 	int		check;
 	int		status;
-	(void)pswd;
+	// (void)pswd;
 
 	serv.SBind();
 	serv.SListen();
@@ -38,9 +38,9 @@ void	startServer(char *port, char *pswd)
 					serv.SAccept();
 				else if (serv[(short)i] & POLLIN)
 				{
-					cout << "Ready to be read!" << endl;
-					memset(req, '\0', REQUEST_SIZE);
-					if ((status = recv(serv[(unsigned int)i], req, REQUEST_SIZE, 0)) == -1)
+					std::cout << "Ready to be read!" << std::endl;
+					memset(req, '\0', BUFFER_SIZE);
+					if ((status = recv(serv[(unsigned int)i], req, BUFFER_SIZE, 0)) == -1)
 					{
 						perror("RECV ");
 						throw (-1);
@@ -54,7 +54,10 @@ void	startServer(char *port, char *pswd)
 							cout << "\t-->" << serv[(long)i] << endl;
 							// TODO: Send serv[(long)i] to get parsed
 							// put you function here......
-							placeCmds(serv[(long)i], serv[(unsigned int)i]);
+							placeCmds(serv[(long)i], serv[(unsigned int)i], pswd);
+							// std::string respond = "PRIVMSG ARAQ : ";
+							// respond += Bot(serv[(long)i]) + "\r\n";
+							// send(serv[(unsigned int)i], respond.c_str(), respond.length(), 0);
 							serv[(long)i].clear();
 							serv[(long)i].resize(0);
 						}

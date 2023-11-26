@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 10:06:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 13:35:55 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 09:39:24 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	Port(char *str)
 	int					i = -1;
 
 	ss >> port;
-	cout << "Port__:" << port << endl;
 	if (port.empty())
 		return (0);
 	while (port[++i])
@@ -42,15 +41,10 @@ static int	Password(char *str)
 
 void	signalHandler(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT || sig == SIGQUIT)
 	{
-		cout << "\rExit successfully : Receiving SIGINT..." << endl;
+		std::cout << ANSI_COLOR_GREEN << "\rExit IRCSERVER ...." << ANSI_COLOR_RESET << std::endl;
 		exit(EXIT_SUCCESS);
-	}
-	if (sig == SIGQUIT)
-	{
-		cout << "\rExit unsuccessfully : Receiving SIGQUIT..." << endl;
-		exit(EXIT_FAILURE);
 	}
 }
 
