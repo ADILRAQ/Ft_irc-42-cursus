@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:08:36 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/15 09:52:34 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 12:21:36 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,3 +16,7 @@
 #include <signal.h>
 
 void	startServer(char *port, char *pswd);
+
+// Command
+
+std::string const	Bot(std::string const &request);

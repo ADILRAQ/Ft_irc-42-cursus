@@ -7,12 +7,16 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-const char* API_HOST = "api.weatherapi.com";
-const char* API_PATH = "/v1/current.json";
-const char* API_KEY = "3240efe1d82a44d798b123556231811";  // Replace with your OpenWeatherMap API key
+// const char* API_HOST = "api.weatherapi.com";
+// const char* API_PATH = "/v1/current.json";
+// const char* API_KEY = "3240efe1d82a44d798b123556231811";  // Replace with your OpenWeatherMap API key
+
+const char* API_HOST = "api.weatherbit.io";
+const char* API_PATH = "/v2.0/current";
+const char* API_KEY = "4ac280ffcc73447da0524f6457ba296c";  // Replace with your OpenWeatherMap API key
 
 int main() {
-    const char* cityName = "tetouan";
+    const char* cityName = "rabat";
 
     // Resolve the host name to an IP address
     struct hostent* host = gethostbyname(API_HOST);
@@ -43,8 +47,9 @@ int main() {
 
     // Construct the HTTP request
     std::ostringstream request;
-    request << "GET " << API_PATH << "?key=" << API_KEY << "&q=" << cityName << " HTTP/1.1\r\n";
+    request << "GET " << API_PATH << "?city=" << cityName << "&key=" << API_KEY << " HTTP/1.1\r\n";
     request << "Host: " << API_HOST << "\r\n";
+    request << "Accept: application/json\r\n";
     request << "Connection: close\r\n\r\n";
 
     const std::string& requestStr = request.str();

@@ -6,17 +6,17 @@
 #    By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/11 17:50:29 by araqioui          #+#    #+#              #
-#    Updated: 2023/11/13 15:54:20 by araqioui         ###   ########.fr        #
+#    Updated: 2023/11/25 17:51:01 by araqioui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 CC = c++
-FLAGS = -Wall -Werror -Wextra -std=c++98 -g
+FLAGS = -Wall -Werror -Wextra -std=c++98 #-g
 RM = rm -f
 HEADER = MainHeader.hpp Server.hpp
 
-SRC = IRC Server startServer
+SRC = IRC Server startServer Bot
 OBJ = $(SRC:=.o)
 
 all: $(NAME)

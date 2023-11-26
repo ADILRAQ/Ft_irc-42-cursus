@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:48:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/19 10:05:39 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 15:50:00 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,24 @@
 
 #define SIZE			512
 #define BACKLOG			10
-#define REQUEST_SIZE	1024
+#define BUFFER_SIZE		2028
+
+#define ANSI_COLOR_RED "\033[1;31m"
+#define ANSI_COLOR_GREEN "\033[1;32m"
+#define ANSI_COLOR_YELLOW "\033[1;33m"
+#define ANSI_COLOR_RESET "\033[0m"
 
 typedef struct addrinfo			Addrinfo;
 typedef struct pollfd			Pollfd;
 typedef struct sockaddr_storage	SStorage;
+typedef struct sockaddr_in		Sockaddr_in;
+typedef struct hostent			Hostent;
 
 class Server {
 	private:
 		std::vector<Pollfd>			Sockets;
 		std::vector<std::string>	Request;
-		Addrinfo					*address;
+		Addrinfo					*Address;
 		Server(void);
 		Server(Server const &obj);
 		Server	&operator = (Server const &source);

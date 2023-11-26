@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/19 10:50:23 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/25 15:51:47 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	startServer(char *port, char *pswd)
 {
 	Server	serv(port);
-	char	req[REQUEST_SIZE];
+	char	req[BUFFER_SIZE];
 	int		check;
 	int		status;
 	(void)pswd;
@@ -39,8 +39,8 @@ void	startServer(char *port, char *pswd)
 				else if (serv[(short)i] & POLLIN)
 				{
 					std::cout << "Ready to be read!" << std::endl;
-					memset(req, '\0', REQUEST_SIZE);
-					if ((status = recv(serv[(unsigned int)i], req, REQUEST_SIZE, 0)) == -1)
+					memset(req, '\0', BUFFER_SIZE);
+					if ((status = recv(serv[(unsigned int)i], req, BUFFER_SIZE, 0)) == -1)
 					{
 						perror("RECV ");
 						throw (-1);
@@ -54,6 +54,9 @@ void	startServer(char *port, char *pswd)
 							std::cout << "\t-->" << serv[(long)i] << std::endl;
 							// TODO: Send serv[(long)i] to get parsed
 							// put you function here......
+							std::string respond = "PRIVMSG ARAQ : ";
+							respond += Bot(serv[(long)i]) + "\r\n";
+							send(serv[(unsigned int)i], respond.c_str(), respond.length(), 0);
 							serv[(long)i].clear();
 							serv[(long)i].resize(0);
 						}
