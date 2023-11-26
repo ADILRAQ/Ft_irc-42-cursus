@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 09:49:20 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 11:13:33 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	startServer(char *port, char *pswd)
 					}
 					else if (status)
 					{
+						req[status] = '\0';
 						string	message(req);
 						serv[(long)i] += message;
 						if (serv[(long)i][0] != '\n' && serv[(long)i].find('\n') != string::npos)
@@ -64,7 +65,7 @@ void	startServer(char *port, char *pswd)
 					}
 					else
 					{
-						placeCmds("", serv[(unsigned int)i]);
+						placeCmds("", serv[(unsigned int)i], pswd);
 						cout << "Closed: " << serv[(unsigned int)i] << endl;
 						serv.SClose(i);
 					}

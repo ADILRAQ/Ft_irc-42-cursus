@@ -6,13 +6,13 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 11:23:04 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 10:00:00 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
 
-Cmd::Cmd(cmdInfos& obj, int& fd) : data(obj) , CurrentClientFD(fd)
+Cmd::Cmd(cmdInfos& obj, int& fd, string &passwd) : data(obj) , CurrentClientFD(fd), pass(passwd)
 {
 
 }

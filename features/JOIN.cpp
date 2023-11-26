@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 14:14:53 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 14:08:08 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ void    Cmd::JOIN()
             throw runtime_error(": 461 " + save[CurrentClientFD].second.first + " :Not enough parameters\r\n");
         Chan obj(data.second[0], save[CurrentClientFD].second.first, CurrentClientFD);
         Channel::setChannel(obj);
+        _send(CurrentClientFD, ":" + save[CurrentClientFD].second.first + "!~" + save[CurrentClientFD].second.second + "@" + "localhost" + " JOIN " + data.second[0] + "\r\n");
+        _send(CurrentClientFD, ":ircserv MODE " + data.second[0] + " +o " + save[CurrentClientFD].second.first + "\r\n");
+        _send(CurrentClientFD, "ircserv 353 " + save[CurrentClientFD].second.first + " = " + data.second[0] + " :@" + save[CurrentClientFD].second.first + "\r\n");
+        _send(CurrentClientFD, "ircserv 366 " + save[CurrentClientFD].second.first + data.second[0] + " :End of /NAMES list.\r\n");
         return ;
     }
 
@@ -67,12 +71,16 @@ void    Cmd::JOIN()
     else if (sz == 2 && keep['k'].first == false)
         throw runtime_error(": 461 " + save[CurrentClientFD].second.first + " :Not enough parameters\r\n");
     Channel::getChannel()[ChannelIndex].setMember(save[CurrentClientFD].second.first, CurrentClientFD);
-                cout << "---------- JOIN " << CurrentChannels[ChannelIndex].getChannelName()<< " --------------\n";
-        map<int, string>::iterator  it0 = CurrentChannels[ChannelIndex].getMembersFromFD().begin();
-        map<int, string>::iterator  it0e = CurrentChannels[ChannelIndex].getMembersFromFD().end();
-        for (map<int, string>::iterator  t0 = it0; t0 != it0e; t0++)
-        {
-            cout << "first " << t0->first << "  "  << t0->second << '\n';
-        }
-        cout << "-------------------------\n";
+    _send(CurrentClientFD, ":" + save[CurrentClientFD].second.first + "!~" + save[CurrentClientFD].second.second + "@" + "localhost" + " JOIN " + data.second[0] + "\r\n");
+    _send(CurrentClientFD, "ircserv 353 " + save[CurrentClientFD].second.first + " = " + data.second[0] + " :@" + save[CurrentClientFD].second.first + "\r\n");
+    _send(CurrentClientFD, "ircserv 366 " + save[CurrentClientFD].second.first + data.second[0] + " :End of /NAMES list.\r\n");
 }
+
+        //         cout << "---------- JOIN " << CurrentChannels[ChannelIndex].getChannelName()<< " --------------\n";
+        // map<int, string>::iterator  it0 = CurrentChannels[ChannelIndex].getMembersFromFD().begin();
+        // map<int, string>::iterator  it0e = CurrentChannels[ChannelIndex].getMembersFromFD().end();
+        // for (map<int, string>::iterator  t0 = it0; t0 != it0e; t0++)
+        // {
+        //     cout << "first " << t0->first << "  "  << t0->second << '\n';
+        // }
+        // cout << "-------------------------\n";

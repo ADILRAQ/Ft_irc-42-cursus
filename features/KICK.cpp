@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:26 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 16:36:28 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 14:11:38 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,16 @@ void    Cmd::KICK()
     }
 
     Channel::getChannel()[ChannelIndex].removeClient(data.second[1]);
-            /******/
-            cout << "---------- KICK " << Channel::getChannel()[ChannelIndex].getChannelName()<< "--------------\n";
-             memberInfo& sv = Channel::getChannel()[ChannelIndex].getMembers();
-        memberInfo::iterator it = sv.begin();
-        memberInfo::iterator ite = sv.end();
-        for (memberInfo::iterator t = it; t != ite; t++)
-        {
-            cout << "first " << t->first << "  " << t->second.first<< '\n';
-        }
-        cout << "-------------------------\n";
-        /*****   */
 }
+
+        //     /******/
+        //     cout << "---------- KICK " << Channel::getChannel()[ChannelIndex].getChannelName()<< "--------------\n";
+        //      memberInfo& sv = Channel::getChannel()[ChannelIndex].getMembers();
+        // memberInfo::iterator it = sv.begin();
+        // memberInfo::iterator ite = sv.end();
+        // for (memberInfo::iterator t = it; t != ite; t++)
+        // {
+        //     cout << "first " << t->first << "  " << t->second.first<< '\n';
+        // }
+        // cout << "-------------------------\n";
+        // /*****   */

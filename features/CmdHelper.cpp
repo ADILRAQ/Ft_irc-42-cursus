@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 15:45:12 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 11:47:16 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void    checkWhitespaces(string & s, bool & flg, const string & nick)
             break ;
         if (i == s.length() - 1)
             return ;
-    } 
+    }
     throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
 }
 
@@ -73,21 +73,24 @@ cmdInfos    placeParams(string & cmd, const string & nick)
     return params;
 }
 
-void    placeCmds(string cmd, int fd)
+void    placeCmds(string cmd, int fd, const char * passwd)
 {
     cmdInfos    obj;
     ClientInfos clients = Client::getClient();
+    string ps(passwd);
 
     try
     {
         cmd.erase(cmd.size() - 1);
+        if (cmd[cmd.size() - 1] == '\r')
+            cmd.erase(cmd.size() - 1);
         obj = placeParams(cmd, clients[fd].second.first);
     }
     catch(const exception & e)
     {
         _send(fd, e.what());
     }
-    Cmd command(obj, fd);
+    Cmd command(obj, fd, ps);
     command.executeCmd(clients[fd].second.first);
 }
 
@@ -109,7 +112,7 @@ int    ValidString(const string s, bool flg)
 
 void    checkParamsUser(const vector<string> & vc, const string & nick)
 {
-    if (vc.size() != 1 || vc[0].empty())
+    if ((vc.size() != 1 && vc.size() != 4) || vc[0].empty())
         throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
 
     unsigned int i = 0;
