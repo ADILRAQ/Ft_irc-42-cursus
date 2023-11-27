@@ -6,11 +6,18 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 14:08:08 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 10:46:05 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
+
+void    announceJoining(string & nick, string & user, string &channel, const int & fd, bool flg)
+{
+    _send(fd, ":" + nick + "!~" + user + "@" + "localhost" + " JOIN " + channel + "\r\n");
+    if (flg)
+        _send(fd, ":ircserv MODE " + channel + " +o " + nick + "\r\n");
+}
 
 void    Cmd::JOIN()
 {
@@ -40,47 +47,29 @@ void    Cmd::JOIN()
 
     if (flg)
     {
-        if (sz != 1)
-            throw runtime_error(": 461 " + save[CurrentClientFD].second.first + " :Not enough parameters\r\n");
         Chan obj(data.second[0], save[CurrentClientFD].second.first, CurrentClientFD);
         Channel::setChannel(obj);
-        _send(CurrentClientFD, ":" + save[CurrentClientFD].second.first + "!~" + save[CurrentClientFD].second.second + "@" + "localhost" + " JOIN " + data.second[0] + "\r\n");
-        _send(CurrentClientFD, ":ircserv MODE " + data.second[0] + " +o " + save[CurrentClientFD].second.first + "\r\n");
-        _send(CurrentClientFD, "ircserv 353 " + save[CurrentClientFD].second.first + " = " + data.second[0] + " :@" + save[CurrentClientFD].second.first + "\r\n");
-        _send(CurrentClientFD, "ircserv 366 " + save[CurrentClientFD].second.first + data.second[0] + " :End of /NAMES list.\r\n");
+        announceJoining(save[CurrentClientFD].second.first, save[CurrentClientFD].second.second, data.second[0], CurrentClientFD, 1);
         return ;
     }
 
-    try
-    {
-        Chan keep = CurrentChannels[ChannelIndex];
-        if (keep.getModes()['i'].first)
-            throw runtime_error(":ircserv 473 " + save[CurrentClientFD].second.first + " :This channel is invite only\r\n");
-        cout << "^^^^^^^ " << (keep.getModes())['l'].first << "  " << keep.getMembersFromFD().size() << " " << keep.getLimit() << '\n';
-        if ((keep.getModes())['l'].first && keep.getMembersFromFD().size() >= keep.getLimit())
-            throw runtime_error(":ircserv 471 " + save[CurrentClientFD].second.first + " :Channel is full\r\n");
-    }
-    catch (const exception & e)
-    {
-        throw runtime_error(e.what());
-    }
-
+    Chan currentChannel = CurrentChannels[ChannelIndex];
     modeInfo& keep = CurrentChannels[ChannelIndex].getModes();
-    if (sz == 2 && keep['k'].first == true && keep['k'].second != data.second[1])
-        throw runtime_error("ERR_BADCHANNELKEY\n");
-    else if (sz == 2 && keep['k'].first == false)
-        throw runtime_error(": 461 " + save[CurrentClientFD].second.first + " :Not enough parameters\r\n");
-    Channel::getChannel()[ChannelIndex].setMember(save[CurrentClientFD].second.first, CurrentClientFD);
-    _send(CurrentClientFD, ":" + save[CurrentClientFD].second.first + "!~" + save[CurrentClientFD].second.second + "@" + "localhost" + " JOIN " + data.second[0] + "\r\n");
-    _send(CurrentClientFD, "ircserv 353 " + save[CurrentClientFD].second.first + " = " + data.second[0] + " :@" + save[CurrentClientFD].second.first + "\r\n");
-    _send(CurrentClientFD, "ircserv 366 " + save[CurrentClientFD].second.first + data.second[0] + " :End of /NAMES list.\r\n");
-}
 
-        //         cout << "---------- JOIN " << CurrentChannels[ChannelIndex].getChannelName()<< " --------------\n";
-        // map<int, string>::iterator  it0 = CurrentChannels[ChannelIndex].getMembersFromFD().begin();
-        // map<int, string>::iterator  it0e = CurrentChannels[ChannelIndex].getMembersFromFD().end();
-        // for (map<int, string>::iterator  t0 = it0; t0 != it0e; t0++)
-        // {
-        //     cout << "first " << t0->first << "  "  << t0->second << '\n';
-        // }
-        // cout << "-------------------------\n";
+    if ((sz == 2 && keep['k'].first == true && keep['k'].second != data.second[1]) || (sz == 2 && keep['k'].first == false))
+        throw runtime_error(":ircserv 475 " + save[CurrentClientFD].second.first + " :Cannot join channel (+k)\r\n");
+    if (keep['i'].first)
+        throw runtime_error(":ircserv 473 " + save[CurrentClientFD].second.first + " :This channel is invite only\r\n");
+    if (keep['l'].first && currentChannel.getMembersFromFD().size() >= currentChannel.getLimit())
+        throw runtime_error(":ircserv 471 " + save[CurrentClientFD].second.first + " :Channel is full\r\n");
+
+    Channel::getChannel()[ChannelIndex].setMember(save[CurrentClientFD].second.first, CurrentClientFD);
+    announceJoining(save[CurrentClientFD].second.first, save[CurrentClientFD].second.second, data.second[0], CurrentClientFD, 0);
+
+    map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
+    map<int, string>::iterator it = var.begin();
+    map<int, string>::iterator ite = var.end();
+
+    for (map<int, string>::iterator t = it; t != ite; t++)
+        announceJoining(save[CurrentClientFD].second.first, save[CurrentClientFD].second.second, data.second[0], t->first, 0);
+}

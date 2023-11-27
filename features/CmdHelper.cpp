@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 11:47:16 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 11:21:48 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,14 +187,11 @@ char    checkMode(const vector<string> & vc, const string & nick)
     unsigned int sz = vc.size();
     if ((sz != 2 && sz != 3) || (vc[0].empty() || vc[1].empty() || (sz == 3 && vc[2].empty())))
         throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
-    
+
     if (vc[1].length() != 2 || (vc[1][0] != '-' && vc[1][0] != '+') || (vc[1][1] != 'i' && vc[1][1] != 't' && vc[1][1] != 'k' && vc[1][1] != 'o' && vc[1][1] != 'l'))
-        throw runtime_error(":ircserv 501 " + nick + " :Unknown MODE flag");
+        throw runtime_error(":ircserv 472 " + nick + " " + vc[1][1] + " :is unknown mode char to me");
 
-    if (sz == 2 && (vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
-        throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
-
-    if (sz == 3 && !(vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
+    if (sz == 3 && vc[1][0] == '+' && !(vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
         throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
 
     if (vc[1][1] == 'k')
@@ -202,7 +199,7 @@ char    checkMode(const vector<string> & vc, const string & nick)
 
     if (vc[1][1] == 'l')
         checkLimit(vc[2], nick);
-    
+
     return vc[1][1];
 }
 

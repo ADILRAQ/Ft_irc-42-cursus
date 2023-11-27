@@ -6,11 +6,19 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 16:20:00 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 11:34:49 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
+
+void announceMode(const int &fd, const string & nick, vector<string> & vc)
+{
+    if (vc.size() == 3)
+        _send(fd, ":ircserv 324 " + nick + " " + vc[0] + " " + vc[1] + " " + vc[2] + "\r\n");
+    else
+        _send(fd, ":ircserv 324 " + nick + " " + vc[0] + " " + vc[1] + "\r\n");
+}
 
 void    Cmd::MODE()
 {
@@ -53,6 +61,7 @@ void    Cmd::MODE()
             catch (const exception & e)
             {
                 throw runtime_error(e.what());
+                return ;
             }
             Channel::getChannel()[ChannelIndex].setChannelOper(data.second[2], Set);
             break;
@@ -61,4 +70,5 @@ void    Cmd::MODE()
             Channel::getChannel()[ChannelIndex].setChannelLimit(atoi((data.second[2]).c_str()));
             break;
     }
+    announceMode(CurrentClientFD, Client::getClient()[CurrentClientFD].second.first, data.second);
 }

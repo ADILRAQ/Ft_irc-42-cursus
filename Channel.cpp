@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:47 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 16:41:38 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 11:22:52 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,22 +151,14 @@ unsigned int    ChannelExist(vector<Chan>& CurrentChannels, string & Name, strin
 void    IsInChannel(Chan& CurrentChannel, int fd, bool flg)
 {
     map<int, string> &trav = CurrentChannel.getMembersFromFD();
-    memberInfo &back_insert_iterator = CurrentChannel.getMembers();
     ClientInfos client = Client::getClient();
-    cout << "tracking -------**********\n";
-    memberInfo::iterator it = back_insert_iterator.begin();
-    memberInfo::iterator ite = back_insert_iterator.end();
-    for (memberInfo::iterator t = it; t != ite; t++)
-    {
-        cout << t->first << "  "<<t->second.first<<'\n';
-    }
+
     if (trav.find(fd) == trav.end())
         throw runtime_error(":ircserv 442 " + client[fd].second.first + " :You're not on that channel\r\n");
 
     if (flg)
     {
         memberInfo meM = CurrentChannel.getMembers();
-        cout <<"why " << meM[trav[fd]].second << "\n";
         if (!(meM[trav[fd]].second))
             throw runtime_error(":ircserv 482 " + trav[fd] + " :You're not channel operator\r\n");
     }
