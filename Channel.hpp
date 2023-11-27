@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:52 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 16:15:21 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 14:47:43 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ private:
         map<int, string>                LookForUser;  
         modeInfo                        modesStat;
         unsigned int                    ChannelLimit;
+        vector<string>                  InviteD;
 
 public:
         Chan(string CN, const string & name, int & fd);
@@ -38,6 +39,7 @@ public:
         map<int, string>&       getMembersFromFD();
         modeInfo&               getModes();
         memberInfo&             getMembers();
+        vector<string>&         getInviteD();
 
         void    setChannelName(const string & N);
         void    setChannelLimit(const int & L);
@@ -45,6 +47,7 @@ public:
         void    setMember(const string & mem, const int & fd);
         void    setModesStat(char index, bool flg, string param);
         void    setChannelOper(string & mmbr, bool Set);
+        void    setInviteD(const string & name);
         void    removeClient(string & nm);
 };
 

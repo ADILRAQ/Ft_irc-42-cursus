@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 11:34:49 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 13:51:34 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void announceMode(const int &fd, const string & nick, vector<string> & vc)
 {
     if (vc.size() == 3)
-        _send(fd, ":ircserv 324 " + nick + " " + vc[0] + " " + vc[1] + " " + vc[2] + "\r\n");
+        _send(fd, ": 324 " + nick + " " + vc[0] + " " + vc[1] + " " + vc[2] + "\r\n");
     else
-        _send(fd, ":ircserv 324 " + nick + " " + vc[0] + " " + vc[1] + "\r\n");
+        _send(fd, ": 324 " + nick + " " + vc[0] + " " + vc[1] + "\r\n");
 }
 
 void    Cmd::MODE()
@@ -30,12 +30,12 @@ void    Cmd::MODE()
     try
     {
         FlaG = checkMode(data.second, Client::getClient()[CurrentClientFD].second.first);
+        ChannelIndex = ChannelExist(CurrentChannels, data.second[0], Client::getClient()[CurrentClientFD].second.first);
+        IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, true);
         if (data.second[1][0] == '+')
             Set = true;
         else
             Set = false;
-        ChannelIndex = ChannelExist(CurrentChannels, data.second[0], Client::getClient()[CurrentClientFD].second.first);
-        IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, true);
     }
     catch (const exception & e)
     {
@@ -70,5 +70,10 @@ void    Cmd::MODE()
             Channel::getChannel()[ChannelIndex].setChannelLimit(atoi((data.second[2]).c_str()));
             break;
     }
-    announceMode(CurrentClientFD, Client::getClient()[CurrentClientFD].second.first, data.second);
+    map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
+    map<int, string>::iterator it = var.begin();
+    map<int, string>::iterator ite = var.end();
+
+    for (map<int, string>::iterator t = it; t != ite; t++)
+        announceMode(t->first, Client::getClient()[CurrentClientFD].second.first, data.second);
 }

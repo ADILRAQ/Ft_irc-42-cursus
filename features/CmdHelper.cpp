@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 11:21:48 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 22:19:11 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void    checkWhitespaces(string & s, bool & flg, const string & nick)
         if (i == s.length() - 1)
             return ;
     }
-    throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+    throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 }
 
 cmdInfos    placeParams(string & cmd, const string & nick)
@@ -59,11 +59,7 @@ cmdInfos    placeParams(string & cmd, const string & nick)
         save.push_back(toStr);
     }
     if (flg)
-    {
-        if (params.first != "TOPIC" && params.first != "KICK")
-            NSplit.insert(NSplit.begin(), ':');
         save.push_back(NSplit);
-    }
     params.second = save;
     cout << "********** print data **********\n";
     cout << "cmd: " << params.first << '\n';
@@ -78,6 +74,9 @@ void    placeCmds(string cmd, int fd, const char * passwd)
     cmdInfos    obj;
     ClientInfos clients = Client::getClient();
     string ps(passwd);
+
+    if (cmd.empty())
+        ; //delete this user from clients and channels;
 
     try
     {
@@ -100,6 +99,8 @@ int    ValidString(const string s, bool flg)
 {
     int i = 0;
 
+    if (!flg)
+        i++;
     for (; i < int(s.length()); i++)
     {
         if (flg && s[i] == 32)
@@ -113,43 +114,43 @@ int    ValidString(const string s, bool flg)
 void    checkParamsUser(const vector<string> & vc, const string & nick)
 {
     if ((vc.size() != 1 && vc.size() != 4) || vc[0].empty())
-        throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 
     unsigned int i = 0;
     for (; i < vc[0].length(); i++)
         if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
-            throw runtime_error(":ircserv 432" + nick + " :Non valid character\r\n");
+            throw runtime_error(": 432" + nick + " :Non valid character\r\n");
 
     if (i > 9)
-        throw runtime_error(":ircserv 432 " + nick + " :Passed the valid length\r\n");
+        throw runtime_error(": 432 " + nick + " :Passed the valid length\r\n");
 }
 
 void    checkParamsNick(const vector<string> & vc)
 {
     if (vc.size() != 1 || vc[0].empty())
-        throw runtime_error(":ircserv 461 :Not enough parameters\r\n");
+        throw runtime_error(": 461 :Not enough parameters\r\n");
 
     unsigned int i = 0;
     for (; i < vc[0].length(); i++)
         if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
-            throw runtime_error(":ircserv 432" + vc[0] + " :Non valid character(s)\r\n");
+            throw runtime_error(": 432" + vc[0] + " :Non valid character(s)\r\n");
 
     if (i > 9)
-        throw runtime_error(":ircserv 432 " + vc[0] + " :Passed the valid length\r\n");
+        throw runtime_error(": 432 " + vc[0] + " :Passed the valid length\r\n");
 }
 
 unsigned int    checkChannel(const vector<string> & vc, const string & nick)
 {
     unsigned int sz = vc.size();
     if (sz != 1 && sz != 2)
-        throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 
     if (vc[0].empty() || vc[0][0] != '#' || (sz == 2 && vc[1].empty()))
-        throw runtime_error(":ircserv 403 " + vc[0] + " :No such channel\r\n");
+        throw runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
 
     int i = ValidString(vc[0], true);
     if (i < 0 || i > 50)
-        throw runtime_error(":ircserv 403 " + vc[0] + " :No such channel\r\n");
+        throw runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
     return sz;
 }
 
@@ -158,13 +159,13 @@ unsigned int    checkTopic(const vector<string> & vc, const string & nick)
     unsigned int sz = vc.size();
 
     if (sz != 1 && sz != 2)
-        throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 
     if (vc[0].empty() || (sz == 2 && vc[1].empty()))
-        throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
-cout << "topic " << vc[1];
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+
     if (sz == 2 && ValidString(vc[1], false) < 0)
-        throw runtime_error(":ircserv 432 " + nick + " :Non valid character(s)\r\n");
+        throw runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
     return sz;
 }
 
@@ -172,27 +173,27 @@ void    checkKey(string key, const string & nick)
 {
     for (unsigned int i(0); i < key.length(); i++)
         if (!isalpha(key[i]))
-            throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+            throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 }
 
 void    checkLimit(string limit, const string & nick)
 {
     for (unsigned int i(0); i < limit.length(); i++)
         if (!isdigit(limit[i]))
-            throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+            throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 }
 
 char    checkMode(const vector<string> & vc, const string & nick)
 {
     unsigned int sz = vc.size();
     if ((sz != 2 && sz != 3) || (vc[0].empty() || vc[1].empty() || (sz == 3 && vc[2].empty())))
-        throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 
     if (vc[1].length() != 2 || (vc[1][0] != '-' && vc[1][0] != '+') || (vc[1][1] != 'i' && vc[1][1] != 't' && vc[1][1] != 'k' && vc[1][1] != 'o' && vc[1][1] != 'l'))
-        throw runtime_error(":ircserv 472 " + nick + " " + vc[1][1] + " :is unknown mode char to me");
+        throw runtime_error(": 472 " + nick + " " + vc[1] + " :is unknown mode char to me\r\n");
 
     if (sz == 3 && vc[1][0] == '+' && !(vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
-        throw runtime_error(":ircserv 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
 
     if (vc[1][1] == 'k')
         checkKey(vc[2], nick);

@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 10:00:00 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 22:21:52 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void Cmd::BeginExec(int i)
 
 void    Cmd::executeCmd(const string & nick)
 {
-    string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "QUIT"};
+    string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "QUIT"};
     ClientInfos CurrentClient = Client::getClient();
 
     if (CurrentClient.find(CurrentClientFD) == CurrentClient.end())
@@ -52,27 +52,28 @@ void    Cmd::executeCmd(const string & nick)
     if (CurrentClient[CurrentClientFD].first < 3 && Which[CurrentClient[CurrentClientFD].first] == data.first)
         BeginExec(CurrentClient[CurrentClientFD].first);
     else if (CurrentClient[CurrentClientFD].first < 3 && Which[CurrentClient[CurrentClientFD].first] != data.first)
-        _send(CurrentClientFD, ":ircserv 451 :You have not registered in the right process\r\n");
+        _send(CurrentClientFD, ": 451 :You have not registered in the right process\r\n");
     else
     {
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < 10; i++)
         {
             if (data.first == Which[i])
             {
                 BeginExec(i);
                 break ;
             }
-            if (i + 1 == 9)
-                _send(CurrentClientFD, ":ircserv 421 " + nick + " :Unknown command\r\n");
+            if (i + 1 == 10)
+                _send(CurrentClientFD, ": 421 " + nick + " :Unknown command\r\n");
         }
     }
-    /******************/
-    ClientInfos::iterator it = CurrentClient.begin();
-    ClientInfos::iterator ite = CurrentClient.end();
-    cout << "////////////////////////////////////\n";
-    for(ClientInfos::iterator t = it; t != ite; t++)
-    {
-        cout << t->first << "  " << t->second.first << "  " << t->second.second.first << "  " << t->second.second.second << '\n';
-    }
-    /*****************/
 }
+
+    // /******************/
+    // ClientInfos::iterator it = CurrentClient.begin();
+    // ClientInfos::iterator ite = CurrentClient.end();
+    // cout << "////////////////////////////////////\n";
+    // for(ClientInfos::iterator t = it; t != ite; t++)
+    // {
+    //     cout << t->first << "  " << t->second.first << "  " << t->second.second.first << "  " << t->second.second.second << '\n';
+    // }
+    // /*****************/

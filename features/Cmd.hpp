@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 10:00:40 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 21:30:04 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ public:
         void    INVITE();
         void    TOPIC();
         void    MODE();
+        void    PRIVMSG();
         void    QUIT();
 
 };
@@ -59,4 +60,5 @@ void            _send(int fd, string mess);
 unsigned int    checkChannel(const vector<string> & vc, const string & nick);
 unsigned int    checkTopic(const vector<string> & vc, const string & nick);
 char            checkMode(const vector<string> & vc, const string & nick);
+int             ValidString(const string s, bool flg);
 cmdInfos        placeParams(string & cmd, const string & nick);
