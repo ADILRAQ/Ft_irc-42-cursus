@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:58:05 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:33:34 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static std::string	getValue(std::string const &request, std::string const &name)
 	return (value);
 }
 
-std::string const	&Bot(std::string const &cmdLine, int fd)
+std::string const	Bot(std::string const &cmdLine, int fd)
 {
 	Hostent		*hostInfo;
 	Sockaddr_in	server;
@@ -93,7 +93,7 @@ std::string const	&Bot(std::string const &cmdLine, int fd)
 	std::string	request, help, message = "";
 	char		respond[BUFFER_SIZE];
 	ssize_t		len;
-
+(void)fd;
 	request = makeRequest(getCityName(cmdLine));
 
 	if (!request.empty())

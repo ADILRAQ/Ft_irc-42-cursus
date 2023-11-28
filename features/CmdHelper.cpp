@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 18:26:23 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:30:47 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
             _send(fd, e.what());
         }
     }
-    Cmd command(obj, fd, ps);
+    Cmd command(obj, fd, ps, IP);
     command.executeCmd(clients[fd].second.first);
 }
 

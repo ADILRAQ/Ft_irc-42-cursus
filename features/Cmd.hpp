@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 16:08:30 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:30:07 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ private:
         cmdInfos        data;
         int             CurrentClientFD;
         string          &pass;
+        string          &host;
 
 public:
-        Cmd(cmdInfos& obj, int& fd, string &passwd);
+        Cmd(cmdInfos& obj, int& fd, string &passwd, string &hst);
         ~Cmd();
 
         const cmdInfos& getCmdInfos() const;
