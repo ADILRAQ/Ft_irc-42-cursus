@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 21:29:20 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 11:49:20 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:25:38 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void    Cmd::PRIVMSG()
     string& nick = Client::getClient()[CurrentClientFD].second.first;
     unsigned int sz = data.second.size();
     if (sz != 2)
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :PRIVMSG Not enough parameters\r\n");
     if (ValidString(data.second[1], 0) < 0)
         throw runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
 

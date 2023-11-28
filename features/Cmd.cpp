@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 10:58:49 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:18:50 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,11 @@ void    Cmd::executeCmd(const string & nick)
 
     if (CurrentClient.find(CurrentClientFD) == CurrentClient.end())
         Client::setClient(CurrentClientFD, "", "");
-//TO FIX
-    if (CurrentClient[CurrentClientFD].first < 3 && Which[CurrentClient[CurrentClientFD].first] == data.first)
-        BeginExec(CurrentClient[CurrentClientFD].first);
-    else if (CurrentClient[CurrentClientFD].first < 3 && Which[CurrentClient[CurrentClientFD].first] != data.first)
+
+    int j = CurrentClient[CurrentClientFD].first;
+    if (j < 3 && Which[j] == data.first)
+        BeginExec(j);
+    else if (j < 3 && Which[j] != data.first)
         _send(CurrentClientFD, ": 451 :You have not registered in the right process\r\n");
     else
     {
@@ -67,13 +68,3 @@ void    Cmd::executeCmd(const string & nick)
         }
     }
 }
-
-    // /******************/
-    // ClientInfos::iterator it = CurrentClient.begin();
-    // ClientInfos::iterator ite = CurrentClient.end();
-    // cout << "////////////////////////////////////\n";
-    // for(ClientInfos::iterator t = it; t != ite; t++)
-    // {
-    //     cout << t->first << "  " << t->second.first << "  " << t->second.second.first << "  " << t->second.second.second << '\n';
-    // }
-    // /*****************/
