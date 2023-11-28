@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 11:32:19 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:17:42 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,4 +155,9 @@ void	Server::SClose(int i)
 	Sockets.erase(Sockets.begin() + i);
 	SockAddrInfo.erase(SockAddrInfo.begin() + i - 1);
 	Request.erase(Request.begin() + i);
+}
+
+std::string const	&Server::getIP(int i) const
+{
+	return (SockAddrInfo[i]);
 }

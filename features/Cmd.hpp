@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cmd.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 14:49:54 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 16:08:30 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ public:
         void    MODE();
         void    PRIVMSG();
         void    QUIT();
-        void    BOT();
-
 };
 
 typedef void (Cmd::*cmdFunc)();
@@ -56,7 +54,7 @@ typedef void (Cmd::*cmdFunc)();
 void            checkParamsUser(const vector<string> & vc, const string & nick);
 void            checkParamsNick(const vector<string> & vc);
 void            toLowerString(string & s);
-void            placeCmds(string cmd, int fd, const char * passwd);
+void            placeCmds(string cmd, int fd, const char * passwd, string IP);
 void            _send(int fd, string mess);
 void            serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params, const int flg);
 unsigned int    checkChannel(const vector<string> & vc, const string & nick);

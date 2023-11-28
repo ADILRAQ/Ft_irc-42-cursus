@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:04:48 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:27:20 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ const cmdInfos& Cmd::getCmdInfos() const
 
 void Cmd::BeginExec(int i)
 {
-    cmdFunc f[] = {&Cmd::PASS, &Cmd::NICK, &Cmd::USER, &Cmd::JOIN, &Cmd::KICK, &Cmd::INVITE, &Cmd::TOPIC, &Cmd::MODE, &Cmd::PRIVMSG, &Cmd::QUIT, &Cmd::BOT};
+    cmdFunc f[] = {&Cmd::PASS, &Cmd::NICK, &Cmd::USER, &Cmd::JOIN, &Cmd::KICK, &Cmd::INVITE, &Cmd::TOPIC, &Cmd::MODE, &Cmd::PRIVMSG, &Cmd::QUIT};
     try
     {
         (this->*f[i])();
@@ -43,8 +43,14 @@ void Cmd::BeginExec(int i)
 
 void    Cmd::executeCmd(const string & nick)
 {
-    string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "QUIT", "BOT"};
+    string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "QUIT"};
     ClientInfos CurrentClient = Client::getClient();
+
+    if (data.first.empty())
+    {
+        BeginExec(9);
+        return ;
+    }
 
     if (CurrentClient.find(CurrentClientFD) == CurrentClient.end())
         Client::setClient(CurrentClientFD, "", "");
@@ -56,14 +62,14 @@ void    Cmd::executeCmd(const string & nick)
         _send(CurrentClientFD, ": 451 :You have not registered in the right process\r\n");
     else
     {
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 10; i++)
         {
             if (data.first == Which[i])
             {
                 BeginExec(i);
                 break ;
             }
-            if (i + 1 == 11)
+            if (i + 1 == 10)
                 _send(CurrentClientFD, ": 421 " + nick + " :Unknown command\r\n");
         }
     }

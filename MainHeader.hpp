@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MainHeader.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:08:36 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 10:29:44 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:45:32 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,4 @@ void	startServer(char *port, char *pswd);
 
 // Command
 
-std::string const	Bot(std::string const &request);
+std::string const	&Bot(std::string const &request, int fd);
