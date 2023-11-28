@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MainHeader.hpp                                     :+:      :+:    :+:   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/12 13:08:36 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 10:29:44 by fraqioui         ###   ########.fr       */
+/*   Created: 2023/11/21 10:14:55 by fraqioui          #+#    #+#             */
+/*   Updated: 2023/11/24 13:40:15 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include"Client.hpp"
 
-#include "Server.hpp"
-#include "features/Cmd.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
-#include <signal.h>
+ClientInfos Client::client;
 
-void	startServer(char *port, char *pswd);
+Client::Client()
+{
 
-// Command
+}
 
-std::string const	Bot(std::string const &request);
+Client::~Client()
+{
+
+}
+
+void Client::setClient(int fd, string nick, string user)
+{
+    client[fd] = pair<int, pair<string, string> >(0, pair<string, string>(nick, user));
+}
+
+ClientInfos & Client::getClient()
+{
+    return client;
+}

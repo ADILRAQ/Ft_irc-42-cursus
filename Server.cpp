@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 18:06:20 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:32:19 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Server::Server(std::string const &port) : Address(NULL)
 		perror("Socket ");
 		throw -1;
 	}
-	std::cout << "MainSocket: " << help.fd << std::endl;
+	std::cout << COLOR_YELLOW << "MainSocket: " << help.fd << COLOR_RESET << std::endl;
 	help.events = POLLIN;
 	help.revents = 0;
 	Sockets.push_back(help);
@@ -136,7 +136,7 @@ void	Server::SAccept(void)
 		help.fd = newSocket;
 		Sockaddr_in	PrintIP;
 		memcpy(&PrintIP.sin_addr, &inData, inData.ss_len);
-		std::cout << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << std::endl;
+		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << COLOR_RESET << std::endl;
 		std::stringstream	IPaddr(inet_ntoa(PrintIP.sin_addr));
 		help.events = POLLIN;
 		help.revents = 0;
@@ -150,7 +150,7 @@ void	Server::SAccept(void)
 
 void	Server::SClose(int i)
 {
-	std::cout << "Close: " << Sockets[i].fd << "   IP: " << SockAddrInfo[i - 1] << std::endl;
+	std::cout << COLOR_RED << "Close: " << Sockets[i].fd << "   IP: " << SockAddrInfo[i - 1] << COLOR_RESET << std::endl;
 	close(Sockets[i].fd);
 	Sockets.erase(Sockets.begin() + i);
 	SockAddrInfo.erase(SockAddrInfo.begin() + i - 1);

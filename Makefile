@@ -1,3 +1,4 @@
+
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
@@ -10,29 +11,34 @@
 #                                                                              #
 # **************************************************************************** #
 
+
 NAME = ircserv
+
 CC = c++
-FLAGS = -Wall -Werror -Wextra -std=c++98 -g
-RM = rm -f
-HEADER = MainHeader.hpp Server.hpp
+FLAGS = -Wall -Wextra -Werror -std=c++98 -g
+RM = rm -rf
 
-SRC = IRC Server startServer Bot
-OBJ = $(SRC:=.o)
+FILES = IRC Server startServer Channel Client features/Cmd features/CmdHelper features/INVITE features/JOIN \
+		features/KICK features/MODE features/NICK features/PASS features/QUIT features/TOPIC features/USER Bot
 
-all: $(NAME)
+HEADERS = MainHeader.hpp Server.hpp features/cmd.hpp Client.hpp Channel.hpp
 
-$(NAME): $(OBJ) $(HEADER)
-	@ $(CC) $(FLAGS) $(OBJ) -o $@
+FOBJ = ${FILES:=.o}
 
-%.o: %.cpp $(HEADER)
-	$(CC) $(FLAGS) -c $<
+.PHONY = all clean fclean re
+
+all: ${NAME}
+
+${NAME}: ${FOBJ} ${HEADERS}
+	@ ${CC} ${FLAGS} ${FOBJ} -o ${NAME}
+
+%.o: %.cpp
+	${CC} ${FLAGS} -c $< -o $@
 
 clean:
-	@ $(RM) $(OBJ)
+	@ ${RM} ${FOBJ}
 
 fclean: clean
-	@ $(RM) $(NAME)
+	@ ${RM} ${NAME}
 
 re: fclean all
-
-.PHONY: all clean fclean re

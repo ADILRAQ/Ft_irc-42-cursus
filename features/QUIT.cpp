@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MainHeader.hpp                                     :+:      :+:    :+:   */
+/*   QUIT.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/12 13:08:36 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 10:29:44 by fraqioui         ###   ########.fr       */
+/*   Created: 2023/11/21 10:14:39 by fraqioui          #+#    #+#             */
+/*   Updated: 2023/11/28 12:11:25 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include"Cmd.hpp"
 
-#include "Server.hpp"
-#include "features/Cmd.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
-#include <signal.h>
-
-void	startServer(char *port, char *pswd);
-
-// Command
-
-std::string const	Bot(std::string const &request);
+void    Cmd::QUIT()
+{
+	_send(CurrentClientFD, ": QUIT :Gone to have lunch\r\n");
+	// TODO
+}

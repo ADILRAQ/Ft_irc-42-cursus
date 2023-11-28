@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 10:06:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 14:46:39 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:17:18 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	Port(char *str)
 {
-	std::stringstream	ss(str);
-	std::string			port;
+	stringstream	ss(str);
+	string			port;
 	int					i = -1;
 
 	if (!str[i + 1])
@@ -61,7 +61,7 @@ void	signalHandler(int sig)
 {
 	if (sig == SIGINT || sig == SIGQUIT)
 	{
-		std::cout << ANSI_COLOR_GREEN << "\rExit IRCSERVER ...." << ANSI_COLOR_RESET << std::endl;
+		std::cout << COLOR_GREEN << "\rExit IRCSERVER ...." << COLOR_RESET << std::endl;
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -81,6 +81,6 @@ int	main(int ac, char **av)
 		}
 	}
 	else
-		std::cout << "Error: NB of args" << std::endl;
+		cout << "Error: NB of args" << endl;
 	return (1);
 }

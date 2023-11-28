@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 09:28:32 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:30:12 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	startServer(char *port, char *pswd)
 	char	req[BUFFER_SIZE];
 	int		check;
 	int		status;
-	(void)pswd;
+	// (void)pswd;
 
 	serv.SBind();
 	serv.SListen();
@@ -50,18 +50,20 @@ void	startServer(char *port, char *pswd)
 						req[status] = '\0';
 						std::string	message(req);
 						serv[(long)i] += message;
-						if (serv[(long)i][0] != '\n' && serv[(long)i].find('\n') != std::string::npos)
+						if (serv[(long)i][0] != '\n' && serv[(long)i].find('\n') != string::npos)
 						{
-							std::cout << "\t-->" << serv[(long)i] << std::endl;
-							// TODO: Send serv[(long)i] to get parsed
-							// put you function here......
+							cout << "\t-->" << serv[(long)i] << endl;
+							
+							placeCmds(serv[(long)i], serv[(unsigned int)i], pswd);
+							
 							serv[(long)i].clear();
 							serv[(long)i].resize(0);
 						}
 					}
 					else
 					{
-						std::cout << "Closed: " << serv[(unsigned int)i] << std::endl;
+						// To Delete the user
+						placeCmds("", serv[(unsigned int)i], pswd);
 						serv.SClose(i);
 					}
 				}

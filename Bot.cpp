@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 15:51:03 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:17:18 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static std::string const	makeRequest(std::string const &cityName)
 {
 	std::ostringstream	request;
 
-	std::cout << ANSI_COLOR_YELLOW << "City: " << cityName << ANSI_COLOR_RESET << std::endl;
+	std::cout << COLOR_YELLOW << "City: " << cityName << COLOR_RESET << std::endl;
 
 	request << "GET " << API_PATH << "?key=" << API_KEY << "&q=" << cityName << " HTTP/1.1\r\n";
     request << "Host: " << API_HOST << "\r\n";
@@ -78,7 +78,7 @@ static std::string	getValue(std::string const &request, std::string const &name)
 		quoteId++;
 
 	std::string	value = request.substr(nameId, quoteId);
-	// std::cout << ANSI_COLOR_RED << name << " " << value << ANSI_COLOR_RESET << std::endl;
+	// std::cout << COLOR_RED << name << " " << value << COLOR_RESET << std::endl;
 
 	return (value);
 }
@@ -127,7 +127,7 @@ std::string const	Bot(std::string const &cmdLine)
 		help += newstring;
 	}
 	if (!len)
-		std::cout << ANSI_COLOR_RED << "Connection closed!" << ANSI_COLOR_RESET << std::endl;
+		std::cout << COLOR_RED << "Connection closed!" << COLOR_RESET << std::endl;
 	if (len < 0)
 	{
 		perror("HostRecv ");
@@ -145,7 +145,7 @@ std::string const	Bot(std::string const &cmdLine)
 	else
 		message = getValue(help, "\"message\":");
 
-	std::cout << ANSI_COLOR_GREEN << message << ANSI_COLOR_RESET << std::endl;
+	std::cout << COLOR_GREEN << message << COLOR_RESET << std::endl;
 
 	close(hostSocket);
 	return (message);

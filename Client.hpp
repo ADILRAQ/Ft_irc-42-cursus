@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MainHeader.hpp                                     :+:      :+:    :+:   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/12 13:08:36 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/26 10:29:44 by fraqioui         ###   ########.fr       */
+/*   Created: 2023/11/21 10:14:58 by fraqioui          #+#    #+#             */
+/*   Updated: 2023/11/24 11:02:37 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Server.hpp"
-#include "features/Cmd.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
-#include <signal.h>
+#include"header.hpp"
 
-void	startServer(char *port, char *pswd);
+typedef map<int, pair<int , pair<string, string> > > ClientInfos;
 
-// Command
+class Client
+{
+private:
+        static ClientInfos client;
 
-std::string const	Bot(std::string const &request);
+public:
+        Client();
+        ~Client();
+
+        static void setClient(int fd, string nick, string user);
+        static ClientInfos & getClient();
+};
