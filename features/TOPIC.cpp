@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 19:48:09 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/27 22:40:12 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,3 +48,6 @@ void    Cmd::TOPIC()
         _send(CurrentClientFD, ":" + nick + "!"+ Client::getClient()[CurrentClientFD].second.second + "@localhost TOPIC " + data.second[0] + data.second[1] + "\r\n");
     }
 }
+
+// define repeated messages
+// a function that follows the same syntax of sended messages
