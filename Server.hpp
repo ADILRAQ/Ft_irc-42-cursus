@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:48:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 11:24:11 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:17:14 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,15 @@ class Server {
 	public:
 		Server(string const &port);
 		~Server(void);
-		int				operator [] (unsigned int i);
-		short			operator [] (int i);
-		string		&operator [] (long i);
-		void			Revents(void);
-		void			SBind(void);
-		void			SListen(void);
-		int				getSize(void) const;
-		int				SPoll(void);
-		void			SAccept(void);
-		void			SClose(int i);
+		int					operator [] (unsigned int i);
+		short				operator [] (int i);
+		string				&operator [] (long i);
+		void				Revents(void);
+		void				SBind(void);
+		void				SListen(void);
+		int					getSize(void) const;
+		int					SPoll(void);
+		void				SAccept(void);
+		void				SClose(int i);
+		std::string const	&getIP(int i) const;
 };
