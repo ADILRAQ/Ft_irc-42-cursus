@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:26 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 18:14:36 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:25:24 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void    Cmd::KICK()
     string& nick = Client::getClient()[CurrentClientFD].second.first;
     unsigned int sz = data.second.size();
     if (sz != 2 && sz != 3)
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :KICK Not enough parameters\r\n");
     if (sz == 3 && ValidString(data.second[2], 0) < 0)
         throw runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
 
@@ -43,12 +43,7 @@ void    Cmd::KICK()
     map<int, string>::iterator ite = var.end();
 
     for (map<int, string>::iterator t = it; t != ite; t++)
-    {
-        if (sz == 2)
-            _send(t->first, ":" + nick + "!" + Client::getClient()[CurrentClientFD].second.second + "@localhost KICK " + data.second[0] + " " + data.second[1] + " :" + nick + "\r\n");
-        else
-            _send(t->first, ":" + nick + "!" + Client::getClient()[CurrentClientFD].second.second + "@localhost KICK " + data.second[0] + " " + data.second[1] + " :" + data.second[2] + "\r\n");
-    }
+            serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data, 0);
 }
 
         //     /******/

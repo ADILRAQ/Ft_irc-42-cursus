@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:39 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 12:11:25 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:35:27 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,5 @@
 
 void    Cmd::QUIT()
 {
-	_send(CurrentClientFD, ": QUIT :Gone to have lunch\r\n");
-	// TODO
+
 }

@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:52 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 14:47:43 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:26:12 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ private:
         map<int, string>                LookForUser;  
         modeInfo                        modesStat;
         unsigned int                    ChannelLimit;
-        vector<string>                  InviteD;
+        vector<string>                  InviteD; // kick after joining
 
 public:
         Chan(string CN, const string & name, int & fd);

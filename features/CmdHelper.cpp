@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 10:27:57 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:27:19 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int    ValidString(const string s, bool flg)
 void    checkParamsUser(const vector<string> & vc, const string & nick)
 {
     if ((vc.size() != 1 && vc.size() != 4) || vc[0].empty())
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :USER Not enough parameters\r\n");
 
     unsigned int i = 0;
     for (; i < vc[0].length(); i++)
@@ -128,7 +128,7 @@ void    checkParamsUser(const vector<string> & vc, const string & nick)
 void    checkParamsNick(const vector<string> & vc)
 {
     if (vc.size() != 1 || vc[0].empty())
-        throw runtime_error(": 461 :Not enough parameters\r\n");
+        throw runtime_error(": 461 :NICK Not enough parameters\r\n");
 
     unsigned int i = 0;
     for (; i < vc[0].length(); i++)
@@ -143,7 +143,7 @@ unsigned int    checkChannel(const vector<string> & vc, const string & nick)
 {
     unsigned int sz = vc.size();
     if (sz != 1 && sz != 2)
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :JOIN Not enough parameters\r\n");
 
     if (vc[0].empty() || vc[0][0] != '#' || (sz == 2 && vc[1].empty()))
         throw runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
@@ -159,10 +159,10 @@ unsigned int    checkTopic(const vector<string> & vc, const string & nick)
     unsigned int sz = vc.size();
 
     if (sz != 1 && sz != 2)
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :TOPIC Not enough parameters\r\n");
 
     if (vc[0].empty() || (sz == 2 && vc[1].empty()))
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :TOPIC Not enough parameters\r\n");
 
     if (sz == 2 && ValidString(vc[1], false) < 0)
         throw runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
@@ -173,27 +173,27 @@ void    checkKey(string key, const string & nick)
 {
     for (unsigned int i(0); i < key.length(); i++)
         if (!isalpha(key[i]))
-            throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+            throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 }
 
 void    checkLimit(string limit, const string & nick)
 {
     for (unsigned int i(0); i < limit.length(); i++)
         if (!isdigit(limit[i]))
-            throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+            throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 }
 
 char    checkMode(const vector<string> & vc, const string & nick)
 {
     unsigned int sz = vc.size();
     if ((sz != 2 && sz != 3) || (vc[0].empty() || vc[1].empty() || (sz == 3 && vc[2].empty())))
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 
     if (vc[1].length() != 2 || (vc[1][0] != '-' && vc[1][0] != '+') || (vc[1][1] != 'i' && vc[1][1] != 't' && vc[1][1] != 'k' && vc[1][1] != 'o' && vc[1][1] != 'l'))
         throw runtime_error(": 472 " + nick + " " + vc[1] + " :is unknown mode char to me\r\n");
 
     if (sz == 3 && vc[1][0] == '+' && !(vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
-        throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+        throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 
     if (vc[1][1] == 'k')
         checkKey(vc[2], nick);
@@ -213,4 +213,19 @@ void    toLowerString(string & s)
 void _send(int fd, string mess)
 {
     send(fd, mess.c_str(), mess.length(), 0);
+}
+
+void serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params, const int flg)
+{
+    string save;
+
+    for (unsigned int i(0); i < params.second.size(); i++)
+    {
+        save += params.second[i];
+        if (i != params.second.size() - 1)
+            save += " ";
+    }
+    _send(fd, ":" + userInfo.first + "!" + userInfo.second + "@localhost " + params.first + " " + save + "\r\n");
+    if (flg)
+        _send(fd, ": MODE " + params.second[0] + " +o " + userInfo.first + "\r\n");
 }

@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 14:54:58 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:27:42 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
-
-void    announceJoining(string & nick, string & user, string &channel, const int & fd, bool flg)
-{
-    _send(fd, ":" + nick + "!~" + user + "@" + "localhost" + " JOIN " + channel + "\r\n");
-    if (flg)
-        _send(fd, ": MODE " + channel + " +o " + nick + "\r\n");
-}
 
 void    Cmd::JOIN()
 {
@@ -50,7 +43,7 @@ void    Cmd::JOIN()
     {
         Chan obj(data.second[0], nick, CurrentClientFD);
         Channel::setChannel(obj);
-        announceJoining(nick, save[CurrentClientFD].second.second, data.second[0], CurrentClientFD, 1);
+        serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data, 1);
         return ;
     }
 
@@ -65,12 +58,12 @@ void    Cmd::JOIN()
         throw runtime_error(": 471 " + nick + " :Channel is full\r\n");
 
     Channel::getChannel()[ChannelIndex].setMember(nick, CurrentClientFD);
-    announceJoining(nick, save[CurrentClientFD].second.second, data.second[0], CurrentClientFD, 0);
+    serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data, 0);
 
     map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
     map<int, string>::iterator it = var.begin();
     map<int, string>::iterator ite = var.end();
 
     for (map<int, string>::iterator t = it; t != ite; t++)
-        announceJoining(nick, save[CurrentClientFD].second.second, data.second[0], t->first, 0);
+        serverReplyFormat(t->first, save[CurrentClientFD].second, data, 0);
 }

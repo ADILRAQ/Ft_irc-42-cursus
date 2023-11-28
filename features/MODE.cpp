@@ -6,19 +6,11 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 13:51:34 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:26:05 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
-
-void announceMode(const int &fd, const string & nick, vector<string> & vc)
-{
-    if (vc.size() == 3)
-        _send(fd, ": 324 " + nick + " " + vc[0] + " " + vc[1] + " " + vc[2] + "\r\n");
-    else
-        _send(fd, ": 324 " + nick + " " + vc[0] + " " + vc[1] + "\r\n");
-}
 
 void    Cmd::MODE()
 {
@@ -75,5 +67,5 @@ void    Cmd::MODE()
     map<int, string>::iterator ite = var.end();
 
     for (map<int, string>::iterator t = it; t != ite; t++)
-        announceMode(t->first, Client::getClient()[CurrentClientFD].second.first, data.second);
+        serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data, 0);
 }

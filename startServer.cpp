@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 10:30:12 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:42:33 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,18 @@ void	startServer(char *port, char *pswd)
 						if (serv[(long)i][0] != '\n' && serv[(long)i].find('\n') != string::npos)
 						{
 							cout << "\t-->" << serv[(long)i] << endl;
+							std::istringstream	iss(serv[(long)i]);
+							std::string	word;
+							
+							iss >> word;
+
+							std::cout << "\t-->WORD: " << word << std::endl;
 							
 							placeCmds(serv[(long)i], serv[(unsigned int)i], pswd);
 							
+							if (word == "QUIT")
+								serv.SClose(i);
+
 							serv[(long)i].clear();
 							serv[(long)i].resize(0);
 						}
