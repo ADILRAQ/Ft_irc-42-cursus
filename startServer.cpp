@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 14:42:33 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:44:40 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	startServer(char *port, char *pswd)
 							iss >> word;
 
 							std::cout << "\t-->WORD: " << word << std::endl;
-							
+
 							placeCmds(serv[(long)i], serv[(unsigned int)i], pswd);
-							
+
 							if (word == "QUIT")
 								serv.SClose(i);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cmd.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 14:18:32 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:49:54 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ public:
         void    MODE();
         void    PRIVMSG();
         void    QUIT();
+        void    BOT();
 
 };
 
