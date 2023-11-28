@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 10:06:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 17:55:02 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 14:46:39 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,22 @@ static int	Port(char *str)
 	std::string			port;
 	int					i = -1;
 
-	ss >> port;
-	if (port.empty())
+	if (!str[i + 1])
 		return (0);
-	while (port[++i])
-		if (!isdigit(port[i]))
+	while (str[++i])
+	{
+		if (!isdigit(str[i]))
+		{
+			std::cout << "Error: Bad port format" << std::endl;
 			return (0);
+		}
+	}
+	ss >> port;
 	if (std::stoi(port) < 1024 || std::stoi(port) > 65535)
+	{
+		std::cout << "Error: Bad port format" << std::endl;
 		return (0);
+	}
 	return (1);
 }
 
@@ -33,9 +41,19 @@ static int	Password(char *str)
 {
 	int	i = -1;
 
+	if (!str[i + 1])
+	{
+		std::cout << "Error: Bad pswd format" << std::endl;
+		return (0);
+	}
 	while (str[++i])
+	{
 		if (!isalpha(str[i]))
+		{
+			std::cout << "Error: Bad port format" << std::endl;
 			return (0);
+		}
+	}
 	return (1);
 }
 
@@ -61,8 +79,6 @@ int	main(int ac, char **av)
 			}
 			catch(int){}
 		}
-		else
-			std::cout << "Error: Bad port format" << std::endl;
 	}
 	else
 		std::cout << "Error: NB of args" << std::endl;

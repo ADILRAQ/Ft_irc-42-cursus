@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/24 16:10:11 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 18:06:20 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ void	Server::SAccept(void)
 
 	if (Sockets.size() <= SIZE)
 	{
-		// TODO: We can Store new Connection's data as IP/Port etc...
 		newSocket = accept(Sockets[0].fd, (struct sockaddr *)&inData, &sizeStruct);
 		if (newSocket < 0)
 		{
@@ -135,10 +134,14 @@ void	Server::SAccept(void)
 			throw (-1);
 		}
 		help.fd = newSocket;
-		std::cout << "NewSocket: " << help.fd << std::endl;
+		Sockaddr_in	PrintIP;
+		memcpy(&PrintIP.sin_addr, &inData, inData.ss_len);
+		std::cout << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << std::endl;
+		std::stringstream	IPaddr(inet_ntoa(PrintIP.sin_addr));
 		help.events = POLLIN;
 		help.revents = 0;
 		Sockets.push_back(help);
+		SockAddrInfo.push_back(IPaddr.str());
 		Request.push_back("");
 	}
 	else
@@ -147,8 +150,9 @@ void	Server::SAccept(void)
 
 void	Server::SClose(int i)
 {
-	std::cout << "Delete: " << (Sockets.begin() + i)->fd << std::endl;
+	std::cout << "Close: " << Sockets[i].fd << "   IP: " << SockAddrInfo[i - 1] << std::endl;
 	close(Sockets[i].fd);
 	Sockets.erase(Sockets.begin() + i);
+	SockAddrInfo.erase(SockAddrInfo.begin() + i - 1);
 	Request.erase(Request.begin() + i);
 }

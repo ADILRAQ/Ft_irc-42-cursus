@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:48:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/25 15:50:00 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/26 17:22:50 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct hostent			Hostent;
 class Server {
 	private:
 		std::vector<Pollfd>			Sockets;
+		std::vector<std::string>	SockAddrInfo;
 		std::vector<std::string>	Request;
 		Addrinfo					*Address;
 		Server(void);

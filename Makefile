@@ -6,13 +6,13 @@
 #    By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/11 17:50:29 by araqioui          #+#    #+#              #
-#    Updated: 2023/11/25 17:51:01 by araqioui         ###   ########.fr        #
+#    Updated: 2023/11/26 17:24:38 by araqioui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 CC = c++
-FLAGS = -Wall -Werror -Wextra -std=c++98 #-g
+FLAGS = -Wall -Werror -Wextra -std=c++98 -g
 RM = rm -f
 HEADER = MainHeader.hpp Server.hpp
 
