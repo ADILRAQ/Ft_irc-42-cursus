@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 22:19:11 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:47:07 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,4 +213,19 @@ void    toLowerString(string & s)
 void _send(int fd, string mess)
 {
     send(fd, mess.c_str(), mess.length(), 0);
+}
+
+void serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params, const int flg)
+{
+    string save;
+
+    for (unsigned int i(0); i < params.second.size(); i++)
+    {
+        save += params.second[i];
+        if (i != params.second.size() - 1)
+            save += " ";
+    }
+    _send(fd, ":" + userInfo.first + "!" + userInfo.second + "@localhost " + params.first + " " + save + "\r\n");
+    if (flg)
+        _send(fd, ": MODE " + params.second[0] + " +o " + userInfo.first + "\r\n");
 }

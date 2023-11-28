@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 21:29:20 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 22:16:39 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:49:20 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void    Cmd::PRIVMSG()
         map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
         map<int, string>::iterator it = var.begin();
         map<int, string>::iterator ite = var.end();
-    
+
         for (map<int, string>::iterator t = it; t != ite; t++)
-            _send(t->first, ":" + nick + "!" + Client::getClient()[CurrentClientFD].second.second + "@localhost PRIVMSG " + data.second[0] + " " + data.second[1] + "\r\n");
+           serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data, 0);
         return ;
     }
     ClientInfos clientFD = Client::getClient();
@@ -47,7 +47,12 @@ void    Cmd::PRIVMSG()
     ClientInfos::iterator ite = clientFD.end();
     ClientInfos::iterator t = it;
     for (; t != ite; t++)
-      if (data.second[0] == t->second.second.first)
-        break;
-    _send(t->first, ":" + nick + "!" + Client::getClient()[CurrentClientFD].second.second + "@localhost PRIVMSG " + data.second[0] + " " + data.second[1] + "\r\n");
+    {
+        if (data.second[0] == t->second.second.first)
+        {
+            serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data, 0);
+            return ;
+        }
+    }
+    throw runtime_error(": 401 " + data.second[0] + " :No such nick\r\n");
 }

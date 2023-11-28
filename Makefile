@@ -19,7 +19,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -rf
 
 FILES = IRC Server startServer Channel Client features/Cmd features/CmdHelper features/INVITE features/JOIN \
-		features/KICK features/MODE features/NICK features/PASS features/QUIT features/TOPIC features/USER Bot
+		features/KICK features/MODE features/NICK features/PASS features/PRIVMSG features/QUIT features/TOPIC features/USER Bot
 
 HEADERS = MainHeader.hpp Server.hpp features/cmd.hpp Client.hpp Channel.hpp
 

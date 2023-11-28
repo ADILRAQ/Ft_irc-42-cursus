@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 22:21:52 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:58:49 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ const cmdInfos& Cmd::getCmdInfos() const
 
 void Cmd::BeginExec(int i)
 {
-    cmdFunc f[] = {&Cmd::PASS, &Cmd::NICK, &Cmd::USER, &Cmd::JOIN, &Cmd::KICK, &Cmd::INVITE, &Cmd::TOPIC, &Cmd::MODE, &Cmd::QUIT};
+    cmdFunc f[] = {&Cmd::PASS, &Cmd::NICK, &Cmd::USER, &Cmd::JOIN, &Cmd::KICK, &Cmd::INVITE, &Cmd::TOPIC, &Cmd::MODE, &Cmd::PRIVMSG, &Cmd::QUIT};
     try
     {
         (this->*f[i])();

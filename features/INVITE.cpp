@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:21 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 17:43:26 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:41:57 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,5 @@ void    Cmd::INVITE()
     for (; t != ite; t++)
       if (data.second[0] == t->second.second.first)
         break;
-    
-    _send(t->first, ":" + nick + "!" + CurrentClients[CurrentClientFD].second.second + "@localhost INVITE " + data.second[0] + " " + data.second[1] + "\r\n");
+    serverReplyFormat(t->first, CurrentClients[CurrentClientFD].second, data, 0);
 }

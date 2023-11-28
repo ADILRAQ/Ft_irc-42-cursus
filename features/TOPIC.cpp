@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 22:40:12 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:01:40 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,6 @@ void    Cmd::TOPIC()
         if (CurrentChannels[ChannelIndex].getModes()['t'].first && !CurrentChannels[ChannelIndex].getMembers()[nick].second)
             throw runtime_error(": 482 " + nick + " " + data.second[0] + " :You're not channel operator\r\n");
         Channel::getChannel()[ChannelIndex].setTopic(data.second[1]);
-        _send(CurrentClientFD, ":" + nick + "!"+ Client::getClient()[CurrentClientFD].second.second + "@localhost TOPIC " + data.second[0] + data.second[1] + "\r\n");
+        serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data, 0);
     }
 }
-
-// define repeated messages
-// a function that follows the same syntax of sended messages

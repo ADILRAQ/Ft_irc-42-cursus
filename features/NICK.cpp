@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:32 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/27 17:56:36 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 14:02:32 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ void    Cmd::NICK()
 
     string& nick = Client::getClient()[CurrentClientFD].second.first;
     if (!nick.empty())
-        _send(CurrentClientFD, ":" + nick + "!~" + Client::getClient()[CurrentClientFD].second.second + "@localhost NICK " + ":" + data.second[0] + "\r\n");
+    {
+        vector<Chan> channel = Channel::getChannel();
+        for (unsigned int i(0); i < channel.size(); i++)
+        {
+            if (channel[i].getMembers().find(nick) != channel[i].getMembers().end())
+            {
+                channel[i].getMembers()[data.second[0]] = channel[i].getMembers().find(nick)->second;
+                channel[i].getMembers().erase(channel[i].getMembers().find(nick));
+                channel[i].getMembersFromFD()[CurrentClientFD] = data.second[0];
+            }
+        }
+        serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data, 0);
+    }
     Client::getClient()[CurrentClientFD].second.first = data.second[0];
 }
