@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:17:42 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/29 16:12:59 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ Server::Server(std::string const &port) : Address(NULL)
 
 	if ((error = getaddrinfo("localhost", port.c_str(), &hints, &Address)))
 	{
-		std::cout << gai_strerror(error) << std::endl;
+		std::cout << COLOR_RED << gai_strerror(error) << COLOR_RESET << std::endl;
 		throw (-1);
 	}
 	help.fd = socket(Address->ai_family, Address->ai_socktype, Address->ai_protocol);
 	if (help.fd < 0)
 	{
-		perror("Socket ");
+		perror(COLOR_RED "Socket " COLOR_RESET);
 		throw -1;
 	}
 	std::cout << COLOR_YELLOW << "MainSocket: " << help.fd << COLOR_RESET << std::endl;
@@ -64,7 +64,7 @@ void	Server::NonBlockMode(void)
 {
 	if (fcntl(Sockets[0].fd, F_SETFL, O_NONBLOCK) == -1)
 	{
-		perror("fcntl ");
+		perror(COLOR_RED "fcntl " COLOR_RESET);
 		throw (-1);
 	}
 }
@@ -98,7 +98,7 @@ void	Server::SBind(void)
 
 	if (bind(Sockets[0].fd, Address->ai_addr, Address->ai_addrlen) < 0)
 	{
-		perror("Bind ");
+		perror(COLOR_RED "Bind " COLOR_RESET);
 		throw (-1);
 	}
 }
@@ -107,7 +107,7 @@ void	Server::SListen(void)
 {
 	if (listen(Sockets[0].fd, BACKLOG) < 0)
 	{
-		perror("Listen ");
+		perror(COLOR_RED "Listen " COLOR_RESET);
 		throw (-1);
 	}
 }
@@ -130,7 +130,7 @@ void	Server::SAccept(void)
 		newSocket = accept(Sockets[0].fd, (struct sockaddr *)&inData, &sizeStruct);
 		if (newSocket < 0)
 		{
-			perror("Accept ");
+			perror(COLOR_RED "Accept " COLOR_RESET);
 			throw (-1);
 		}
 		help.fd = newSocket;

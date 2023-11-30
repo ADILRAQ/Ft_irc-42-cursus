@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:59:38 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/29 16:10:04 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	startServer(char *port, char *pswd)
 					serv.SAccept();
 				else if (serv[(short)i] & POLLIN)
 				{
-					std::cout << "Ready to be read!" << std::endl;
 					memset(req, '\0', BUFFER_SIZE);
 					if ((status = recv(serv[(unsigned int)i], req, BUFFER_SIZE, 0)) == -1)
 					{
@@ -52,35 +51,35 @@ void	startServer(char *port, char *pswd)
 						serv[(long)i] += message;
 						if (serv[(long)i][0] != '\n' && serv[(long)i].find('\n') != string::npos)
 						{
-							cout << "\t-->" << serv[(long)i] << endl;
+							cout << COLOR_YELLOW << "INCOMIG DATA: " << serv[(long)i] << COLOR_RESET << endl;
 							std::istringstream	iss(serv[(long)i]);
 							std::string	word;
 
 							iss >> word;
 
-							if (word == "BOT")
-							{
-								std::string mes = Bot(serv[(long)i], serv[(unsigned int)i]);
-								if (!mes.empty())
-									serv[(long)i] = "PRIVMSG :" + mes;
-								else
-									serv[(long)i] = "";
-							}
-							if (!serv[(long)i].empty())
-							{
-								placeCmds(serv[(long)i], serv[(unsigned int)i], pswd, serv.getIP(i));
+							// if (word == "BOT")
+							// {
+							// 	Bot(serv[(long)i]);
+							// 	if (!mes.empty())
+							// 		serv[(long)i] = "PRIVMSG :" + mes;
+							// 	else
+							// 		serv[(long)i] = "";
+							// }
+							// if (!serv[(long)i].empty())
+							// {
+								placeCmds(serv[(long)i], serv[(unsigned int)i], pswd);
 
 								if (word == "QUIT")
 									serv.SClose(i);
 								serv[(long)i].clear();
 								serv[(long)i].resize(0);
-							}
+							// }
 						}
 					}
 					else
 					{
 						// To Delete the user
-						placeCmds("", serv[(unsigned int)i], pswd, "");
+						placeCmds("", serv[(unsigned int)i], pswd);
 						serv.SClose(i);
 					}
 				}
