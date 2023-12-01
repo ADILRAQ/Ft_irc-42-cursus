@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PRIVMSG.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 21:29:20 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:08:32 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/01 09:52:56 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void    Cmd::PRIVMSG()
 		map<int, string>::iterator ite = var.end();
 
 		for (map<int, string>::iterator t = it; t != ite; t++)
-			serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data, 0);
+			serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
 		return ;
 	}
 	ClientInfos clientFD = Client::getClient();
@@ -50,7 +50,7 @@ void    Cmd::PRIVMSG()
 	{
 		if (data.second[0] == t->second.second.first)
 		{
-			serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data, 0);
+			serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
 			return ;
 		}
 	}

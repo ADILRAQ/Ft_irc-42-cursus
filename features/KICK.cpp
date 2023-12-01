@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:26 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 18:54:14 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/01 09:52:42 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ void    Cmd::KICK()
     map<int, string>::iterator ite = var.end();
 
     for (map<int, string>::iterator t = it; t != ite; t++)
-            serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data, 0);
+            serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
 }
