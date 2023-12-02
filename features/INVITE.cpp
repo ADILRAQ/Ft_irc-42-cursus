@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:21 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 14:25:05 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:53:30 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void    Cmd::INVITE()
 {
 		unsigned int    ChannelIndex;
-		vector<Chan> CurrentChannels = Channel::getChannel();
+		vector<Chan>& CurrentChannels = Channel::getChannel();
 		ClientInfos CurrentClients = Client::getClient();
 		string &nick = CurrentClients[CurrentClientFD].second.first;
 
@@ -37,7 +37,7 @@ void    Cmd::INVITE()
 		if (CurrentChannels[ChannelIndex].getModes()['i'].first && !CurrentChannels[ChannelIndex].getMembers()[nick].second)
 			throw runtime_error(": 482 " + nick + " :You're not channel operator\r\n");
 
-		Channel::getChannel()[ChannelIndex].setInviteD(data.second[0]);
+		CurrentChannels[ChannelIndex].setInviteD(data.second[0]);
 
 		ClientInfos clientFD = Client::getClient();
 		ClientInfos::iterator it = clientFD.begin();

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Cmd.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:12:57 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:48:25 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
 
-Cmd::Cmd(cmdInfos& obj, int& fd, string &passwd) : data(obj) , CurrentClientFD(fd), pass(passwd)
+Cmd::Cmd(cmdInfos& obj, int& fd, string &passwd, string &hst) : data(obj) , CurrentClientFD(fd), pass(passwd), host(hst)
 {
 
 }
@@ -45,6 +45,12 @@ void    Cmd::executeCmd(const string & nick)
 {
     string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "QUIT"};
     ClientInfos CurrentClient = Client::getClient();
+
+    if (data.first.empty())
+    {
+        BeginExec(9);
+        return ;
+    }
 
     if (CurrentClient.find(CurrentClientFD) == CurrentClient.end())
         Client::setClient(CurrentClientFD, "", "");

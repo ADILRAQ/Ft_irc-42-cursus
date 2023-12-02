@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 11:01:40 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:56:29 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void    Cmd::TOPIC()
 {
     string& nick = Client::getClient()[CurrentClientFD].second.first;
     unsigned int ChannelIndex, sz = checkTopic(data.second, nick);
-    vector<Chan>    CurrentChannels = Channel::getChannel();
+    vector<Chan>&    CurrentChannels = Channel::getChannel();
     bool IsOper;
 
     try   
@@ -44,7 +44,7 @@ void    Cmd::TOPIC()
     {
         if (CurrentChannels[ChannelIndex].getModes()['t'].first && !CurrentChannels[ChannelIndex].getMembers()[nick].second)
             throw runtime_error(": 482 " + nick + " " + data.second[0] + " :You're not channel operator\r\n");
-        Channel::getChannel()[ChannelIndex].setTopic(data.second[1]);
+        CurrentChannels[ChannelIndex].setTopic(data.second[1]);
         serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data, 0);
     }
 }

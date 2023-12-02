@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/29 16:10:12 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/30 11:14:08 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ private:
         cmdInfos        data;
         int             CurrentClientFD;
         string          &pass;
+        string          &host;
 
 public:
-        Cmd(cmdInfos& obj, int& fd, string &passwd);
+        Cmd(cmdInfos& obj, int& fd, string &passwd, string &hst);
         ~Cmd();
 
         const cmdInfos& getCmdInfos() const;
@@ -54,7 +55,7 @@ typedef void (Cmd::*cmdFunc)();
 void            checkParamsUser(const vector<string> & vc, const string & nick);
 void            checkParamsNick(const vector<string> & vc);
 void            toLowerString(string & s);
-void            placeCmds(string cmd, int fd, const char * passwd);
+void            placeCmds(string cmd, int fd, const char * passwd, string IP);
 void            _send(int fd, string mess);
 void            serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params, const int flg);
 unsigned int    checkChannel(const vector<string> & vc, const string & nick);

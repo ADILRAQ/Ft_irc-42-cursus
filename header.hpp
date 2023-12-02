@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:15:01 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 12:12:17 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:41:41 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@
 # include <netdb.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <sys/types.h>
 
 using namespace std;

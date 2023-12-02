@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/29 16:12:59 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/01 14:49:30 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 Server::Server(std::string const &port) : Address(NULL)
 {
+	
 	Addrinfo	hints;
 	Pollfd		help;
 	int			error;
@@ -22,8 +23,9 @@ Server::Server(std::string const &port) : Address(NULL)
 
 	hints.ai_family = PF_INET;
 	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE;
 
-	if ((error = getaddrinfo("localhost", port.c_str(), &hints, &Address)))
+	if ((error = getaddrinfo(NULL, port.c_str(), &hints, &Address)))
 	{
 		std::cout << COLOR_RED << gai_strerror(error) << COLOR_RESET << std::endl;
 		throw (-1);
@@ -34,7 +36,9 @@ Server::Server(std::string const &port) : Address(NULL)
 		perror(COLOR_RED "Socket " COLOR_RESET);
 		throw -1;
 	}
-	std::cout << COLOR_YELLOW << "MainSocket: " << help.fd << COLOR_RESET << std::endl;
+	Sockaddr_in	*ptr = (Sockaddr_in *)Address->ai_addr;
+	std::cout << COLOR_GREEN << "MainSocket: " << help.fd << "  " << inet_ntoa(ptr->sin_addr) << ":" << ntohs(ptr->sin_port) << COLOR_RESET << std::endl;
+	std::cout << std::endl;
 	help.events = POLLIN;
 	help.revents = 0;
 	Sockets.push_back(help);
@@ -69,22 +73,22 @@ void	Server::NonBlockMode(void)
 	}
 }
 
-int Server::operator [] (unsigned int i)
+int Server::getFD(size_t i)
 {
 	return (Sockets[i].fd);
 }
 
-short	Server::operator [] (int i)
+short	Server::getRevents(size_t i)
 {
 	return (Sockets[i].revents);
 }
 
-std::string	&Server::operator [] (long i)
+std::string	&Server::getRequest(size_t i)
 {
 	return (Request[i]);
 }
 
-int	Server::getSize(void) const
+size_t	Server::getSize(void) const
 {
 	return (Sockets.size());
 }
@@ -136,7 +140,7 @@ void	Server::SAccept(void)
 		help.fd = newSocket;
 		Sockaddr_in	PrintIP;
 		memcpy(&PrintIP.sin_addr, &inData, inData.ss_len);
-		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << COLOR_RESET << std::endl;
+		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << ":" << ntohs(PrintIP.sin_port) << COLOR_RESET << std::endl;
 		std::stringstream	IPaddr(inet_ntoa(PrintIP.sin_addr));
 		help.events = POLLIN;
 		help.revents = 0;
@@ -148,7 +152,7 @@ void	Server::SAccept(void)
 		std::cout << "Connection Not Accepeted!" << std::endl;
 }
 
-void	Server::SClose(int i)
+void	Server::SClose(size_t i)
 {
 	std::cout << COLOR_RED << "Close: " << Sockets[i].fd << "   IP: " << SockAddrInfo[i - 1] << COLOR_RESET << std::endl;
 	close(Sockets[i].fd);
@@ -157,7 +161,7 @@ void	Server::SClose(int i)
 	Request.erase(Request.begin() + i);
 }
 
-std::string const	&Server::getIP(int i) const
+std::string const	&Server::getIP(size_t i) const
 {
 	return (SockAddrInfo[i]);
 }

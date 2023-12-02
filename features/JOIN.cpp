@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 14:27:42 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/11/28 18:35:29 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void    Cmd::JOIN()
         throw runtime_error(e.what());
     }
 
-    vector<Chan> CurrentChannels = Channel::getChannel();
+    vector<Chan>& CurrentChannels = Channel::getChannel();
     unsigned int ChannelIndex;
     bool flg = 0;
     try
@@ -57,7 +57,7 @@ void    Cmd::JOIN()
     if (keep['l'].first && currentChannel.getMembersFromFD().size() >= currentChannel.getLimit())
         throw runtime_error(": 471 " + nick + " :Channel is full\r\n");
 
-    Channel::getChannel()[ChannelIndex].setMember(nick, CurrentClientFD);
+    CurrentChannels[ChannelIndex].setMember(nick, CurrentClientFD);
     serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data, 0);
 
     map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
