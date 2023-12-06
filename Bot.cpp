@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/30 11:15:20 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:01:22 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static std::string const	getCityName(std::string cmdLine)
 		i++;
 	if (cmdLine[i] == '\n' || cmdLine[i] == '\r')
 	{
-		// Ignore the request
 		return ("");
 	}
 	while (cmdLine[i] != '\n' && cmdLine[i] != '\r')
@@ -80,12 +79,9 @@ static std::string	getValue(std::string const &request, std::string const &name)
 		quoteId++;
 
 	std::string	value = request.substr(nameId, quoteId);
-	// std::cout << COLOR_RED << name << " " << value << COLOR_RESET << std::endl;
 
 	return (value);
 }
-
-// TODO: After every system function failure send a Connection error message
 
 void	Bot(std::string const &cmdLine)
 {
@@ -108,7 +104,7 @@ void	Bot(std::string const &cmdLine)
 
 		memset(&server, '\0', sizeof(Sockaddr_in));
 		server.sin_family = AF_INET;
-		server.sin_port = htons(80); //HTTP port
+		server.sin_port = htons(80);
 		memcpy(&server.sin_addr, hostInfo->h_addr_list[0], hostInfo->h_length);
 
 		if (connect(hostSocket, (struct sockaddr *)&server, sizeof(server)) == -1)
@@ -134,6 +130,6 @@ void	Bot(std::string const &cmdLine)
 		else
 			message = getValue(help, "\"message\":");
 		std::cout << COLOR_GREEN << message << COLOR_RESET << std::endl;
+		close(hostSocket);
 	}
-	close(hostSocket);
 };

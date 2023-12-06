@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/30 11:14:08 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 09:50:19 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@ void            checkParamsNick(const vector<string> & vc);
 void            toLowerString(string & s);
 void            placeCmds(string cmd, int fd, const char * passwd, string IP);
 void            _send(int fd, string mess);
-void            serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params, const int flg);
+void            serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params);
+void            checkKey(string key, const string & nick);
+void            checkLimit(string limit, const string & nick);
 unsigned int    checkChannel(const vector<string> & vc, const string & nick);
 unsigned int    checkTopic(const vector<string> & vc, const string & nick);
-char            checkMode(const vector<string> & vc, const string & nick);
 int             ValidString(const string s, bool flg);
 cmdInfos        placeParams(string & cmd, const string & nick);

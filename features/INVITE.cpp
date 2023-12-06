@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   INVITE.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:21 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 18:53:30 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 09:50:37 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,5 @@ void    Cmd::INVITE()
 		for (; t != ite; t++)
 			if (data.second[0] == t->second.second.first)
 				break;
-		serverReplyFormat(t->first, CurrentClients[CurrentClientFD].second, data, 0);
+		serverReplyFormat(t->first, CurrentClients[CurrentClientFD].second, data);
 }

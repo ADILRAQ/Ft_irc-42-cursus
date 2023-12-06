@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/01 14:49:30 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:02:43 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	Server::SBind(void)
 
 void	Server::SListen(void)
 {
-	if (listen(Sockets[0].fd, BACKLOG) < 0)
+	if (listen(Sockets[0].fd, SOMAXCONN) < 0)
 	{
 		perror(COLOR_RED "Listen " COLOR_RESET);
 		throw (-1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdHelper.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 18:30:47 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 09:50:29 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,27 +183,6 @@ void    checkLimit(string limit, const string & nick)
             throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 }
 
-char    checkMode(const vector<string> & vc, const string & nick)
-{
-    unsigned int sz = vc.size();
-    if ((sz != 2 && sz != 3) || (vc[0].empty() || vc[1].empty() || (sz == 3 && vc[2].empty())))
-        throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
-
-    if (vc[1].length() != 2 || (vc[1][0] != '-' && vc[1][0] != '+') || (vc[1][1] != 'i' && vc[1][1] != 't' && vc[1][1] != 'k' && vc[1][1] != 'o' && vc[1][1] != 'l'))
-        throw runtime_error(": 472 " + nick + " " + vc[1] + " :is unknown mode char to me\r\n");
-
-    if (sz == 3 && vc[1][0] == '+' && !(vc[1][1] == 'k' || vc[1][1] == 'o' || vc[1][1] == 'l'))
-        throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
-
-    if (vc[1][1] == 'k')
-        checkKey(vc[2], nick);
-
-    if (vc[1][1] == 'l')
-        checkLimit(vc[2], nick);
-
-    return vc[1][1];
-}
-
 void    toLowerString(string & s)
 {
     for (unsigned int i(0); i < s.length(); i++)
@@ -215,7 +194,7 @@ void _send(int fd, string mess)
     send(fd, mess.c_str(), mess.length(), 0);
 }
 
-void serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params, const int flg)
+void serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params)
 {
     string save;
 
@@ -226,6 +205,4 @@ void serverReplyFormat(const int &fd, const pair<string, string>& userInfo, cons
             save += " ";
     }
     _send(fd, ":" + userInfo.first + "!" + userInfo.second + "@localhost " + params.first + " " + save + "\r\n");
-    if (flg)
-        _send(fd, ": MODE " + params.second[0] + " +o " + userInfo.first + "\r\n");
 }

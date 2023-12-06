@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 18:56:29 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 09:52:45 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void    Cmd::TOPIC()
     {
         if (CurrentChannels[ChannelIndex].getModes()['t'].first && !CurrentChannels[ChannelIndex].getMembers()[nick].second)
             throw runtime_error(": 482 " + nick + " " + data.second[0] + " :You're not channel operator\r\n");
-        CurrentChannels[ChannelIndex].setTopic(data.second[1]);
-        serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data, 0);
+        Channel::getChannel()[ChannelIndex].setTopic(data.second[1]);
+        serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data);
     }
 }

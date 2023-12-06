@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 18:35:29 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 09:52:24 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void    Cmd::JOIN()
 {
-    unsigned int sz;
+    unsigned int    sz;
+    string          s;
     ClientInfos save = Client::getClient();
     string&     nick = save[CurrentClientFD].second.first;
 
@@ -43,7 +44,9 @@ void    Cmd::JOIN()
     {
         Chan obj(data.second[0], nick, CurrentClientFD);
         Channel::setChannel(obj);
-        serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data, 1);
+        serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data);
+    _send(CurrentClientFD, ": 353 " + nick + " @ " + data.second[0] + " :" + "@" + nick + "\r\n");
+    _send(CurrentClientFD, ": 366 " + nick + " " + data.second[0] + " :End of /NAMES list.\r\n");
         return ;
     }
 
@@ -57,13 +60,30 @@ void    Cmd::JOIN()
     if (keep['l'].first && currentChannel.getMembersFromFD().size() >= currentChannel.getLimit())
         throw runtime_error(": 471 " + nick + " :Channel is full\r\n");
 
-    CurrentChannels[ChannelIndex].setMember(nick, CurrentClientFD);
-    serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data, 0);
-
+    Channel::getChannel()[ChannelIndex].setMember(nick, CurrentClientFD);
+    serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data);
+    memberInfo trav = CurrentChannels[ChannelIndex].getMembers();
     map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
     map<int, string>::iterator it = var.begin();
     map<int, string>::iterator ite = var.end();
+    for (map<int, string>::iterator t = it; t != ite; t++)
+    {
+        if (t == it)
+            s += nick + " ";
+        if (t->second == nick)
+            continue ;
+        if (trav[t->second].second)
+            s += "@";
+        s += t->second + " ";
+    }
+    if (!CurrentChannels[ChannelIndex].getTopic().empty())
+        _send(CurrentClientFD, ": 332 " + nick + " " + data.second[0] + " :" + CurrentChannels[ChannelIndex].getTopic() + "\r\n");
+    _send(CurrentClientFD, ": 353 " + nick + " @ " + data.second[0] + " :" + s + "\r\n");
+    _send(CurrentClientFD, ": 366 " + nick + " " + data.second[0] + " :End of /NAMES list.\r\n");
 
     for (map<int, string>::iterator t = it; t != ite; t++)
-        serverReplyFormat(t->first, save[CurrentClientFD].second, data, 0);
+        serverReplyFormat(t->first, save[CurrentClientFD].second, data);
 }
+//handle part
+// new the ancient modes of the channel
+//handl colon
