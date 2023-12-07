@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 09:59:00 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:01:32 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	startServer(char *port, char *pswd)
 {
 	Server	serv(port);
 	char	req[BUFFER_SIZE];
-	int		check, status, flg = 0;
+	int		check, status;
 
 	serv.SBind();
 	serv.SListen();
@@ -54,7 +54,7 @@ void	startServer(char *port, char *pswd)
 							std::string			line;
 							while (getline(CompleteMes, line))
 							{
-								std::cout << COLOR_GREEN << "\tLINE: " << line  << "  " << flg << COLOR_RESET << std::endl;
+								std::cout << COLOR_GREEN << "\tLINE: " << line  << "  " << COLOR_RESET << std::endl;
 								if (line.substr(0, line.find(' ')) == "QUIT")
 								{
 									status = 0; // To enter the next condition
@@ -73,7 +73,6 @@ void	startServer(char *port, char *pswd)
 						serv.SClose(i);
 					}
 				}
-				flg++;
 			}
 		}
 	}
