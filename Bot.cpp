@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 18:33:34 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:01:22 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static std::string const	getCityName(std::string cmdLine)
 		i++;
 	if (cmdLine[i] == '\n' || cmdLine[i] == '\r')
 	{
-		// TODO: Try to ignore it, Like return an empty string
 		return ("");
 	}
 	while (cmdLine[i] != '\n' && cmdLine[i] != '\r')
@@ -80,12 +79,11 @@ static std::string	getValue(std::string const &request, std::string const &name)
 		quoteId++;
 
 	std::string	value = request.substr(nameId, quoteId);
-	// std::cout << COLOR_RED << name << " " << value << COLOR_RESET << std::endl;
 
 	return (value);
 }
 
-std::string const	Bot(std::string const &cmdLine, int fd)
+void	Bot(std::string const &cmdLine)
 {
 	Hostent		*hostInfo;
 	Sockaddr_in	server;
@@ -93,37 +91,27 @@ std::string const	Bot(std::string const &cmdLine, int fd)
 	std::string	request, help, message = "";
 	char		respond[BUFFER_SIZE];
 	ssize_t		len;
-(void)fd;
+
 	request = makeRequest(getCityName(cmdLine));
 
 	if (!request.empty())
 	{
-
 		if ((hostInfo = gethostbyname(API_HOST)) == NULL)
-		{
-			perror("Gethostbyname ");
-			throw (-1);
-		}
+			return (perror(COLOR_RED "Gethostbyname " COLOR_RESET));
+
 		if ((hostSocket = socket(PF_INET, SOCK_STREAM, 0)) < 0)
-		{
-			perror("HostSocket ");
-			throw (-1);
-		}
+			return (perror(COLOR_RED "HostSocket " COLOR_RESET));
+
 		memset(&server, '\0', sizeof(Sockaddr_in));
 		server.sin_family = AF_INET;
-		server.sin_port = htons(80); //HTTP port
+		server.sin_port = htons(80);
 		memcpy(&server.sin_addr, hostInfo->h_addr_list[0], hostInfo->h_length);
+
 		if (connect(hostSocket, (struct sockaddr *)&server, sizeof(server)) == -1)
-		{
-			perror("Connect ");
-			throw (-1);
-		}
+			return (perror(COLOR_RED "Connect " COLOR_RESET));
 
 		if (send(hostSocket, request.c_str(), request.length(), 0) == -1)
-		{
-			perror("SendHost ");
-			throw (-1);
-		}
+			return (perror(COLOR_RED "SendHost " COLOR_RESET));
 
 		while ((len = recv(hostSocket, respond, BUFFER_SIZE - 1, 0)) > 0)
 		{
@@ -132,10 +120,7 @@ std::string const	Bot(std::string const &cmdLine, int fd)
 			help += newstring;
 		}
 		if (len < 0)
-		{
-			perror("HostRecv ");
-			throw (-1);
-		}
+			return (perror(COLOR_RED "HostRecv " COLOR_RESET));
 
 		if (HTTPcode(help))
 		{
@@ -144,9 +129,7 @@ std::string const	Bot(std::string const &cmdLine, int fd)
 		}
 		else
 			message = getValue(help, "\"message\":");
-
 		std::cout << COLOR_GREEN << message << COLOR_RESET << std::endl;
+		close(hostSocket);
 	}
-	close(hostSocket);
-	return (message);
 };

@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/02 10:03:38 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 09:55:17 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void    Cmd::JOIN()
         throw runtime_error(e.what());
     }
 
-    vector<Chan> CurrentChannels = Channel::getChannel();
+    vector<Chan>& CurrentChannels = Channel::getChannel();
     unsigned int ChannelIndex;
     bool flg = 0;
     try

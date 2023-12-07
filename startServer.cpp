@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:59:38 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/03 14:00:05 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,74 +16,64 @@ void	startServer(char *port, char *pswd)
 {
 	Server	serv(port);
 	char	req[BUFFER_SIZE];
-	int		check;
-	int		status;
-	// (void)pswd;
+	int		check, status, flg = 0;
 
 	serv.SBind();
 	serv.SListen();
 	while (true)
 	{
-		check = 0;
+		// check = 0;
 		if ((check = serv.SPoll()) == -1)
 		{
-			perror("Poll ");
+			perror(COLOR_RED "Poll " COLOR_RESET);
 			throw (-1);
 		}
 		else if (check)
 		{
-			for (int i = 0; i < serv.getSize(); i++)
+			for (size_t i = 0; i < serv.getSize(); i++)
 			{
-				if (i == 0 && serv[(short)0] & POLLIN)
+				if (i == 0 && serv.getRevents(i) & POLLIN)
 					serv.SAccept();
-				else if (serv[(short)i] & POLLIN)
+				else if (serv.getRevents(i) & POLLIN)
 				{
-					std::cout << "Ready to be read!" << std::endl;
 					memset(req, '\0', BUFFER_SIZE);
-					if ((status = recv(serv[(unsigned int)i], req, BUFFER_SIZE, 0)) == -1)
+					if ((status = recv(serv.getFD(i), req, BUFFER_SIZE, 0)) == -1)
 					{
-						perror("RECV ");
+						perror(COLOR_RED "RECV " COLOR_RESET);
 						throw (-1);
 					}
 					else if (status)
 					{
 						req[status] = '\0';
 						std::string	message(req);
-						serv[(long)i] += message;
-						if (serv[(long)i][0] != '\n' && serv[(long)i].find('\n') != string::npos)
+						serv.getRequest(i) += message;
+						if (serv.getRequest(i)[0] != '\n' && *(serv.getRequest(i).end() - 1) == '\n')
 						{
-							cout << "\t-->" << serv[(long)i] << endl;
-							std::istringstream	iss(serv[(long)i]);
-							std::string	word;
-
-							iss >> word;
-
-							if (word == "BOT")
+							cout << COLOR_YELLOW << "INCOMIG DATA: " << serv.getRequest(i) << COLOR_RESET << endl;
+							std::istringstream	CompleteMes(serv.getRequest(i));
+							std::string			line;
+							while (getline(CompleteMes, line))
 							{
-								std::string mes = Bot(serv[(long)i], serv[(unsigned int)i]);
-								if (!mes.empty())
-									serv[(long)i] = "PRIVMSG :" + mes;
-								else
-									serv[(long)i] = "";
+								std::cout << COLOR_GREEN << "\tLINE: " << line  << "  " << flg << COLOR_RESET << std::endl;
+								if (line.substr(0, line.find(' ')) == "QUIT")
+								{
+									status = 0; // To enter the next condition
+									break ;
+								}
+								placeCmds(serv.getRequest(i), serv.getFD(i), pswd, serv.getIP(i));
 							}
-							if (!serv[(long)i].empty())
-							{
-								placeCmds(serv[(long)i], serv[(unsigned int)i], pswd, serv.getIP(i));
-
-								if (word == "QUIT")
-									serv.SClose(i);
-								serv[(long)i].clear();
-								serv[(long)i].resize(0);
-							}
+							serv.getRequest(i).clear();
+							serv.getRequest(i).resize(0);
 						}
 					}
-					else
+					if (!status)
 					{
 						// To Delete the user
-						placeCmds("", serv[(unsigned int)i], pswd, "");
+						placeCmds("", serv.getFD(i), pswd, "");
 						serv.SClose(i);
 					}
 				}
+				flg++;
 			}
 		}
 	}

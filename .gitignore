@@ -13,3 +13,6 @@ a.out
 
 # JSON files
 *.json
+
+# TLDRAW files
+*.tldr

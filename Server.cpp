@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 15:17:42 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/02 10:02:43 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 Server::Server(std::string const &port) : Address(NULL)
 {
+	
 	Addrinfo	hints;
 	Pollfd		help;
 	int			error;
@@ -22,19 +23,22 @@ Server::Server(std::string const &port) : Address(NULL)
 
 	hints.ai_family = PF_INET;
 	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE;
 
-	if ((error = getaddrinfo("localhost", port.c_str(), &hints, &Address)))
+	if ((error = getaddrinfo(NULL, port.c_str(), &hints, &Address)))
 	{
-		std::cout << gai_strerror(error) << std::endl;
+		std::cout << COLOR_RED << gai_strerror(error) << COLOR_RESET << std::endl;
 		throw (-1);
 	}
 	help.fd = socket(Address->ai_family, Address->ai_socktype, Address->ai_protocol);
 	if (help.fd < 0)
 	{
-		perror("Socket ");
+		perror(COLOR_RED "Socket " COLOR_RESET);
 		throw -1;
 	}
-	std::cout << COLOR_YELLOW << "MainSocket: " << help.fd << COLOR_RESET << std::endl;
+	Sockaddr_in	*ptr = (Sockaddr_in *)Address->ai_addr;
+	std::cout << COLOR_GREEN << "MainSocket: " << help.fd << "  " << inet_ntoa(ptr->sin_addr) << ":" << ntohs(ptr->sin_port) << COLOR_RESET << std::endl;
+	std::cout << std::endl;
 	help.events = POLLIN;
 	help.revents = 0;
 	Sockets.push_back(help);
@@ -64,27 +68,27 @@ void	Server::NonBlockMode(void)
 {
 	if (fcntl(Sockets[0].fd, F_SETFL, O_NONBLOCK) == -1)
 	{
-		perror("fcntl ");
+		perror(COLOR_RED "fcntl " COLOR_RESET);
 		throw (-1);
 	}
 }
 
-int Server::operator [] (unsigned int i)
+int Server::getFD(size_t i)
 {
 	return (Sockets[i].fd);
 }
 
-short	Server::operator [] (int i)
+short	Server::getRevents(size_t i)
 {
 	return (Sockets[i].revents);
 }
 
-std::string	&Server::operator [] (long i)
+std::string	&Server::getRequest(size_t i)
 {
 	return (Request[i]);
 }
 
-int	Server::getSize(void) const
+size_t	Server::getSize(void) const
 {
 	return (Sockets.size());
 }
@@ -98,16 +102,16 @@ void	Server::SBind(void)
 
 	if (bind(Sockets[0].fd, Address->ai_addr, Address->ai_addrlen) < 0)
 	{
-		perror("Bind ");
+		perror(COLOR_RED "Bind " COLOR_RESET);
 		throw (-1);
 	}
 }
 
 void	Server::SListen(void)
 {
-	if (listen(Sockets[0].fd, BACKLOG) < 0)
+	if (listen(Sockets[0].fd, SOMAXCONN) < 0)
 	{
-		perror("Listen ");
+		perror(COLOR_RED "Listen " COLOR_RESET);
 		throw (-1);
 	}
 }
@@ -130,13 +134,13 @@ void	Server::SAccept(void)
 		newSocket = accept(Sockets[0].fd, (struct sockaddr *)&inData, &sizeStruct);
 		if (newSocket < 0)
 		{
-			perror("Accept ");
+			perror(COLOR_RED "Accept " COLOR_RESET);
 			throw (-1);
 		}
 		help.fd = newSocket;
 		Sockaddr_in	PrintIP;
 		memcpy(&PrintIP.sin_addr, &inData, inData.ss_len);
-		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << COLOR_RESET << std::endl;
+		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << ":" << ntohs(PrintIP.sin_port) << COLOR_RESET << std::endl;
 		std::stringstream	IPaddr(inet_ntoa(PrintIP.sin_addr));
 		help.events = POLLIN;
 		help.revents = 0;
@@ -148,7 +152,7 @@ void	Server::SAccept(void)
 		std::cout << "Connection Not Accepeted!" << std::endl;
 }
 
-void	Server::SClose(int i)
+void	Server::SClose(size_t i)
 {
 	std::cout << COLOR_RED << "Close: " << Sockets[i].fd << "   IP: " << SockAddrInfo[i - 1] << COLOR_RESET << std::endl;
 	close(Sockets[i].fd);
@@ -157,7 +161,7 @@ void	Server::SClose(int i)
 	Request.erase(Request.begin() + i);
 }
 
-std::string const	&Server::getIP(int i) const
+std::string const	&Server::getIP(size_t i) const
 {
 	return (SockAddrInfo[i]);
 }

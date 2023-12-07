@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 10:06:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/11/28 11:17:18 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/03 11:09:00 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static int	Port(char *str)
 {
 	stringstream	ss(str);
-	string			port;
-	int					i = -1;
+	int				port;
+	int				i = -1;
 
 	if (!str[i + 1])
 		return (0);
@@ -29,7 +29,7 @@ static int	Port(char *str)
 		}
 	}
 	ss >> port;
-	if (std::stoi(port) < 1024 || std::stoi(port) > 65535)
+	if (port < 1024 || port > 65535)
 	{
 		std::cout << "Error: Bad port format" << std::endl;
 		return (0);
