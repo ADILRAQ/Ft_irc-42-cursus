@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/01 14:56:12 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 09:53:44 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ cmdInfos    placeParams(string & cmd, const string & nick)
         istringstream   in(cmd);
         getline(in, cmd, ':');
         getline(in, NSplit);
+        NSplit.insert(0, ":");
     }
     istringstream   instr(cmd);
     for (int check(0); getline(instr, toStr, ' '); )
@@ -79,7 +80,6 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
     {
         try
         {
-            cmd.erase(cmd.size() - 1);
             if (cmd[cmd.size() - 1] == '\r')
                 cmd.erase(cmd.size() - 1);
             obj = placeParams(cmd, clients[fd].second.first);

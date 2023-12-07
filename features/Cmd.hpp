@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/01 14:55:27 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 09:02:31 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ public:
         void    MODE();
         void    PRIVMSG();
         void    QUIT();
+        void    PART();
+        void    NOTICE();
 };
 
 typedef void (Cmd::*cmdFunc)();

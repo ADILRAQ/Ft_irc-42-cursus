@@ -6,12 +6,12 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 21:29:20 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/01 09:52:56 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 09:29:52 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
-
+// fix double message
 void    Cmd::PRIVMSG()
 {
 	string& nick = Client::getClient()[CurrentClientFD].second.first;
@@ -28,7 +28,7 @@ void    Cmd::PRIVMSG()
 		try
 		{
 			ChannelIndex = ChannelExist(CurrentChannels, data.second[0], nick);
-			IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, true);
+			IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, false);
 		}
 		catch (const exception & e)
 		{
