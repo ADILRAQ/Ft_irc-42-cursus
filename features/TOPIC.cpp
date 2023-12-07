@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/02 09:52:45 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 09:54:53 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ void    Cmd::TOPIC()
         if (CurrentChannels[ChannelIndex].getModes()['t'].first && !CurrentChannels[ChannelIndex].getMembers()[nick].second)
             throw runtime_error(": 482 " + nick + " " + data.second[0] + " :You're not channel operator\r\n");
         Channel::getChannel()[ChannelIndex].setTopic(data.second[1]);
-        serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data);
+		map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
+		map<int, string>::iterator it = var.begin();
+		map<int, string>::iterator ite = var.end();
+
+		for (map<int, string>::iterator t = it; t != ite; t++)
+			serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
     }
 }

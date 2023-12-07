@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/02 09:52:24 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 09:55:17 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void    Cmd::JOIN()
 {
     unsigned int    sz;
-    string          s;
+    string          s, holder;
     ClientInfos save = Client::getClient();
     string&     nick = save[CurrentClientFD].second.first;
 
@@ -78,6 +78,21 @@ void    Cmd::JOIN()
     }
     if (!CurrentChannels[ChannelIndex].getTopic().empty())
         _send(CurrentClientFD, ": 332 " + nick + " " + data.second[0] + " :" + CurrentChannels[ChannelIndex].getTopic() + "\r\n");
+    modeInfo& ModE = CurrentChannels[ChannelIndex].getModes();
+    modeInfo::iterator it0 = ModE.begin();
+    modeInfo::iterator ite0 = ModE.end();
+    holder.push_back('+');
+    for (modeInfo::iterator t0 = it0; t0 != ite0; t0++)
+        if (t0->second.first)
+            holder.push_back(t0->first);
+    if (holder.length() < 6)
+    {
+        holder.push_back('-');
+        for (modeInfo::iterator t0 = it0; t0 != ite0; t0++)
+            if (!t0->second.first)
+                holder.push_back(t0->first);
+    }
+    _send(CurrentClientFD, "");
     _send(CurrentClientFD, ": 353 " + nick + " @ " + data.second[0] + " :" + s + "\r\n");
     _send(CurrentClientFD, ": 366 " + nick + " " + data.second[0] + " :End of /NAMES list.\r\n");
 
@@ -85,5 +100,5 @@ void    Cmd::JOIN()
         serverReplyFormat(t->first, save[CurrentClientFD].second, data);
 }
 //handle part
-// new the ancient modes of the channel
+
 //handl colon
