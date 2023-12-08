@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 10:01:32 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 10:14:17 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	startServer(char *port, char *pswd)
 									status = 0; // To enter the next condition
 									break ;
 								}
-								placeCmds(serv.getRequest(i), serv.getFD(i), pswd, serv.getIP(i));
+								placeCmds(line, serv.getFD(i), pswd, serv.getIP(i));
 							}
 							serv.getRequest(i).clear();
 							serv.getRequest(i).resize(0);

@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 09:55:17 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:04:03 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,3 @@ void    Cmd::JOIN()
     for (map<int, string>::iterator t = it; t != ite; t++)
         serverReplyFormat(t->first, save[CurrentClientFD].second, data);
 }
-//handle part
-
-//handl colon

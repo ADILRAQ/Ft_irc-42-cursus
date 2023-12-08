@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 09:55:09 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:27:30 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
     {
         try
         {
+            cmd.erase(cmd.size() - 1);
             if (cmd[cmd.size() - 1] == '\r')
                 cmd.erase(cmd.size() - 1);
             obj = placeParams(cmd, clients[fd].second.first);
@@ -115,7 +116,7 @@ void    checkParamsUser(const vector<string> & vc, const string & nick)
 {
     if ((vc.size() != 1 && vc.size() != 4) || vc[0].empty())
         throw runtime_error(": 461 " + nick + " :USER Not enough parameters\r\n");
-//start with num
+
     unsigned int i = 0;
     for (; i < vc[0].length(); i++)
         if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
@@ -131,12 +132,14 @@ void    checkParamsNick(const vector<string> & vc)
         throw runtime_error(": 461 :NICK Not enough parameters\r\n");
 
     unsigned int i = 0;
+    if (isdigit(vc[0][i]) || vc[0][0] == '-')
+        throw runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
     for (; i < vc[0].length(); i++)
         if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
-            throw runtime_error(": 432" + vc[0] + " :Non valid character(s)\r\n");
+            throw runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
 
     if (i > 9)
-        throw runtime_error(": 432 " + vc[0] + " :Passed the valid length\r\n");
+        throw runtime_error(": 432 " + vc[0] + " :Erroneous Nickname\r\n");
 }
 
 unsigned int    checkChannel(const vector<string> & vc, const string & nick)

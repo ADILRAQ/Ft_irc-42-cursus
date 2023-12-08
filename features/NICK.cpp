@@ -6,12 +6,12 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:32 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/01 11:33:57 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:04:23 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
-// the syntax of the name
+
 void    Cmd::NICK()
 {
     ClientInfos save = Client::getClient();

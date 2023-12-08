@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cmd.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 09:55:46 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 10:00:39 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include"../header.hpp"
 #include"../Client.hpp"
 #include"../Channel.hpp"
+#include"../MainHeader.hpp"
 
 typedef pair<string, vector<string> > cmdInfos;
 
@@ -35,6 +36,7 @@ public:
         const cmdInfos& getCmdInfos() const;
         void            executeCmd(const string & nick);
         void            BeginExec(int i);
+        void            deleteFromChn(const string & nick);
 
         void    PASS();
         void    USER();
@@ -48,6 +50,7 @@ public:
         void    QUIT();
         void    PART();
         void    NOTICE();
+        void    BOT();
 };
 
 typedef void (Cmd::*cmdFunc)();
