@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdHelper.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 10:27:30 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 11:00:01 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
     {
         try
         {
-            cmd.erase(cmd.size() - 1);
+            if (cmd[cmd.size() - 1] == '\n')
+                cmd.erase(cmd.size() - 1);
             if (cmd[cmd.size() - 1] == '\r')
                 cmd.erase(cmd.size() - 1);
             obj = placeParams(cmd, clients[fd].second.first);

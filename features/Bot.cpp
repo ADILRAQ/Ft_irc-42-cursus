@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:41:13 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 10:50:42 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	Cmd::BOT()
 			message += "  ==>  " + getValue(help, "\"temp_c\":") + "°C   " + getValue(help, "\"text\":");
 		}
 		else
-			message = getValue(help, "\"message\":");
+			message = ":" + getValue(help, "\"message\":");
 		std::cout << COLOR_GREEN << message << COLOR_RESET << std::endl;
 		/****** sending ********/
 		string & nick = Client::getClient()[CurrentClientFD].second.first;
