@@ -3,55 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/02 10:01:22 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 10:41:13 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MainHeader.hpp"
+#include "Cmd.hpp"
+
+// data.fisrt = cmd
+// data.second[vector] == args
 
 const char	*API_HOST = "api.weatherapi.com";
 const char	*API_PATH = "/v1/current.json";
 const char	*API_KEY = "bd9f83a56f2b46b6ae3142327232411";
 
-static std::string const	getCityName(std::string cmdLine)
+static std::string const	getCityName(std::vector<std::string> &city)
 {
-	std::string	request;
-	int			i = 0;
+	std::string	cityName;
+	size_t		i = 0;
 
-	while (cmdLine[i] != ' ')
-		i++;
-	while (cmdLine[i] == ' ')
-		i++;
-	if (cmdLine[i] == '\n' || cmdLine[i] == '\r')
+	while (i < city.size())
 	{
-		return ("");
+		cityName += city[i];
+		if (!city[i + 1].empty())
+			cityName += "%20";
+		i++;
 	}
-	while (cmdLine[i] != '\n' && cmdLine[i] != '\r')
-	{
-		if (cmdLine[i] == ' ')
-		{
-			while (cmdLine[i] == ' ')
-				i++;
-			if (cmdLine[i] == '\n' || cmdLine[i] == '\r')
-				break ;
-			else
-				request += "%20";
-		}
-		else
-			request += cmdLine[i++];
-	}
-	return (request);
+	return (cityName);
 }
 
 static std::string const	makeRequest(std::string const &cityName)
 {
 	std::ostringstream	request;
 
-	if (cityName.empty())
-		return ("");
 	std::cout << COLOR_YELLOW << "City: " << cityName << COLOR_RESET << std::endl;
 
 	request << "GET " << API_PATH << "?key=" << API_KEY << "&q=" << cityName << " HTTP/1.1\r\n";
@@ -83,7 +69,7 @@ static std::string	getValue(std::string const &request, std::string const &name)
 	return (value);
 }
 
-void	Bot(std::string const &cmdLine)
+void	Cmd::BOT()
 {
 	Hostent		*hostInfo;
 	Sockaddr_in	server;
@@ -92,9 +78,7 @@ void	Bot(std::string const &cmdLine)
 	char		respond[BUFFER_SIZE];
 	ssize_t		len;
 
-	request = makeRequest(getCityName(cmdLine));
-
-	if (!request.empty())
+	if (this->data.second.size())
 	{
 		if ((hostInfo = gethostbyname(API_HOST)) == NULL)
 			return (perror(COLOR_RED "Gethostbyname " COLOR_RESET));
@@ -110,6 +94,8 @@ void	Bot(std::string const &cmdLine)
 		if (connect(hostSocket, (struct sockaddr *)&server, sizeof(server)) == -1)
 			return (perror(COLOR_RED "Connect " COLOR_RESET));
 
+		request = makeRequest(getCityName(this->data.second));
+
 		if (send(hostSocket, request.c_str(), request.length(), 0) == -1)
 			return (perror(COLOR_RED "SendHost " COLOR_RESET));
 
@@ -124,12 +110,17 @@ void	Bot(std::string const &cmdLine)
 
 		if (HTTPcode(help))
 		{
-			message = getValue(help, "\"name\":") + ", " + getValue(help, "\"country\":") + "  " + getValue(help, "\"localtime\":");
+			message = ":" + getValue(help, "\"name\":") + ", " + getValue(help, "\"country\":") + "  " + getValue(help, "\"localtime\":");
 			message += "  ==>  " + getValue(help, "\"temp_c\":") + "°C   " + getValue(help, "\"text\":");
 		}
 		else
 			message = getValue(help, "\"message\":");
 		std::cout << COLOR_GREEN << message << COLOR_RESET << std::endl;
+		/****** sending ********/
+		string & nick = Client::getClient()[CurrentClientFD].second.first;
+		string & user = Client::getClient()[CurrentClientFD].second.second;
+		_send(CurrentClientFD, ":" + nick + "!" + user + "@localhost " + "NOTICE" + " " + nick + " " + message + "\r\n");
+		/**********************/
 		close(hostSocket);
 	}
 };
