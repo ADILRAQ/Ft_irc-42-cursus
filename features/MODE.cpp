@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/02 09:52:09 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:13:58 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@ void    Cmd::MODE()
     vector<Chan>& CurrentChannels = Channel::getChannel();
     ClientInfos&  CurrentClients = Client::getClient();
     string& nick = CurrentClients[CurrentClientFD].second.first;
-
     unsigned int sz = data.second.size();
+
+    if (sz == 1)
+        return ;
+
     if (sz < 2)
         throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 
