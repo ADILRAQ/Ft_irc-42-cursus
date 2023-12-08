@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 11:50:53 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 09:48:04 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ public:
         const cmdInfos& getCmdInfos() const;
         void            executeCmd(const string & nick);
         void            BeginExec(int i);
-        void            deleteFromChn(const string & nick);
+        void            deleteFromChn(const string & nick, const unsigned int & index);
 
         void    PASS();
         void    USER();
