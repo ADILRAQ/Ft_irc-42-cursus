@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:28:17 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 12:43:41 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void    Cmd::executeCmd(const string & nick)
         BeginExec(9);
         return ;
     }
-
     if (CurrentClient.find(CurrentClientFD) == CurrentClient.end())
         Client::setClient(CurrentClientFD, "", "");
 

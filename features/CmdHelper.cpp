@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdHelper.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 11:00:01 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 12:47:43 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
         catch(const exception & e)
         {
             _send(fd, e.what());
+            return ;
         }
     }
     Cmd command(obj, fd, ps, IP);
@@ -101,6 +102,8 @@ int    ValidString(const string s, bool flg)
 {
     int i = 0;
 
+    if (!flg && s[0] != ':')
+        return -1;
     if (!flg)
         i++;
     for (; i < int(s.length()); i++)
