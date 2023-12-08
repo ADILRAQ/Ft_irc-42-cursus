@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 13:16:49 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 15:06:49 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void    Cmd::JOIN()
 {
     unsigned int    sz;
-    string          s, holder;
+    string          s, holder1, holder2;
     ClientInfos save = Client::getClient();
     string&     nick = save[CurrentClientFD].second.first;
 
@@ -50,7 +50,7 @@ void    Cmd::JOIN()
         return ;
     }
 
-    Chan currentChannel = CurrentChannels[ChannelIndex];
+    Chan& currentChannel = CurrentChannels[ChannelIndex];
     modeInfo& keep = CurrentChannels[ChannelIndex].getModes();
 
     if ((sz == 2 && keep['k'].first == true && keep['k'].second != data.second[1]) || (sz == 2 && keep['k'].first == false))
@@ -60,10 +60,10 @@ void    Cmd::JOIN()
     if (keep['l'].first && currentChannel.getMembersFromFD().size() >= currentChannel.getLimit())
         throw runtime_error(": 471 " + nick + " :Channel is full\r\n");
 
-    Channel::getChannel()[ChannelIndex].setMember(nick, CurrentClientFD);
+    currentChannel.setMember(nick, CurrentClientFD);
     serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data);
-    memberInfo trav = CurrentChannels[ChannelIndex].getMembers();
-    map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
+    memberInfo trav = currentChannel.getMembers();
+    map<int, string> var = currentChannel.getMembersFromFD();
     map<int, string>::iterator it = var.begin();
     map<int, string>::iterator ite = var.end();
     for (map<int, string>::iterator t = it; t != ite; t++)
@@ -76,29 +76,30 @@ void    Cmd::JOIN()
             s += "@";
         s += t->second + " ";
     }
-    if (!CurrentChannels[ChannelIndex].getTopic().empty())
-        _send(CurrentClientFD, ": 332 " + nick + " " + data.second[0] + " :" + CurrentChannels[ChannelIndex].getTopic() + "\r\n");
-    modeInfo& ModE = CurrentChannels[ChannelIndex].getModes();
+    if (!currentChannel.getTopic().empty())
+        _send(CurrentClientFD, ": 332 " + nick + " " + data.second[0] + " :" + currentChannel.getTopic() + "\r\n");
+    modeInfo& ModE = currentChannel.getModes();
     modeInfo::iterator it0 = ModE.begin();
     modeInfo::iterator ite0 = ModE.end();
-    holder.push_back('+');
     for (modeInfo::iterator t0 = it0; t0 != ite0; t0++)
         if (t0->second.first)
-            holder.push_back(t0->first);
-    if (holder.length() < 6)
-    {
-        holder.push_back('-');
-        for (modeInfo::iterator t0 = it0; t0 != ite0; t0++)
-            if (!t0->second.first)
-                holder.push_back(t0->first);
-    }
-    _send(CurrentClientFD, "");
+            holder2.push_back(t0->first);
+    if (!holder2.empty())
+        holder1 = "+" + holder2;
+    holder2.clear();
+    for (modeInfo::iterator t0 = it0; t0 != ite0; t0++)
+        if (!t0->second.first)
+            holder2.push_back(t0->first);
+    if (!holder2.empty())
+        holder1 += "-" + holder2;
+    _send(CurrentClientFD, ": MODE " + data.second[0] + " " + holder1 + "\r\n");
     _send(CurrentClientFD, ": 353 " + nick + " @ " + data.second[0] + " :" + s + "\r\n");
     _send(CurrentClientFD, ": 366 " + nick + " " + data.second[0] + " :End of /NAMES list.\r\n");
 
     for (map<int, string>::iterator t = it; t != ite; t++)
-        serverReplyFormat(t->first, save[CurrentClientFD].second, data);
-    vector<string>& sv =  CurrentChannels[ChannelIndex].getInviteD();
+        if (t->first != CurrentClientFD)
+            serverReplyFormat(t->first, save[CurrentClientFD].second, data);
+    vector<string>& sv =  currentChannel.getInviteD();
     if (keep['i'].first)
         sv.erase(find(sv.begin(), sv.end(), nick));
 }

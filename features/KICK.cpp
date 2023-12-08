@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:26 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 10:04:09 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:59:08 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void    Cmd::KICK()
         throw runtime_error(e.what());
     }
 
-    CurrentChannels[ChannelIndex].removeClient(data.second[1]);
-    
     map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
     map<int, string>::iterator it = var.begin();
     map<int, string>::iterator ite = var.end();
 
     for (map<int, string>::iterator t = it; t != ite; t++)
             serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
+
+    CurrentChannels[ChannelIndex].removeClient(data.second[1]);
 }
