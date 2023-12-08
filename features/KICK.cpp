@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:26 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/02 09:50:48 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/07 10:04:09 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
-// TODO:: Error(441): evva #rr They are not on that channel
+
 void    Cmd::KICK()
 {
     string& nick = Client::getClient()[CurrentClientFD].second.first;

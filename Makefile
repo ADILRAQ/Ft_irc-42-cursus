@@ -20,7 +20,7 @@ RM = rm -rf
 
 FILES = IRC Server startServer Channel Client features/Cmd features/CmdHelper features/INVITE features/JOIN \
 		features/KICK features/MODE features/NICK features/PASS features/PRIVMSG features/QUIT features/TOPIC \
-		features/PART features/NOTICE features/USER Bot
+		features/NOTICE features/USER Bot
 
 HEADERS = MainHeader.hpp Server.hpp features/cmd.hpp Client.hpp Channel.hpp
 
