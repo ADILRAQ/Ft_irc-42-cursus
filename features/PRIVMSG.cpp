@@ -6,12 +6,12 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 21:29:20 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 09:29:52 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 11:18:47 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
-// fix double message
+
 void    Cmd::PRIVMSG()
 {
 	string& nick = Client::getClient()[CurrentClientFD].second.first;

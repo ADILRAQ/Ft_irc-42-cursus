@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:39 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:26:21 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/08 11:14:28 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@ void    Cmd::deleteFromChn(const string & nick, const unsigned int & index)
     channel[index].getMembers().erase(channel[index].getMembers().find(nick));
     if (channel[index].getMembers().size() == 0)
     {
-        
-        // Channel::getChannel().erase();
+        vector<Chan>::iterator it = channel.begin();
+        vector<Chan>::iterator ite = channel.end();
+        vector<Chan>::iterator t = it;
+        for (int i = 0; t != ite; t++, i++)
+           if (i == index)
+                break ; 
+        Channel::getChannel().erase(t);
     }
 }
 
