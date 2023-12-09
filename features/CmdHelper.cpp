@@ -6,50 +6,50 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 12:47:43 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 09:52:17 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
 
-void    checkWhitespaces(string & s, bool & flg, const string & nick)
+string    eliminateSpaces(string & str, const int & flg)
 {
-    for (unsigned int i(0); i < s.length(); i++)
+    string  ret;
+    int     check(0);
+
+    for (unsigned int i = 0; i < str.length(); i++)
     {
-        if (!i && s[i] == ' ')
-            break ;
-        if (s[i] == ':')
+        if (check == 2 && flg && str[i] == ' ')
+            ;
+        else if (str[i] == ' ')
         {
-            flg = true;
-            return ;
+            while (i < str.length() && str[i] == ' ')
+                i++;
+            ret.push_back(' ');
+            check++;
         }
-        if (s[i] == ' ' && i + 1 < s.length() && s[i + 1] == ' ')
-            break ;
-        if (i == s.length() - 1)
-            return ;
+        ret.push_back(str[i]);
     }
-    throw runtime_error(": 461 " + nick + " :Not enough parameters\r\n");
+    str.clear();
+    return ret;
 }
 
-cmdInfos    placeParams(string & cmd, const string & nick)
+cmdInfos    placeParams(string & cmd)
 {
     cmdInfos        params;
     vector<string>  save;
     string          toStr;
-    string          Split;
-    string          NSplit;
-    bool             flg(0);
+    bool            flg(false);
 
-    checkWhitespaces(cmd, flg, nick);
-    if (flg)
-    {
-        istringstream   in(cmd);
-        getline(in, cmd, ':');
-        getline(in, NSplit);
-        NSplit.insert(0, ":");
-    }
     istringstream   instr(cmd);
-    for (int check(0); getline(instr, toStr, ' '); )
+    getline(instr, toStr, ' ');
+    if (toStr == "PRIVMSG" || toStr == "NOTICE" || toStr == "TOPIC" || toStr == "KICK")
+        flg = true;
+    cmd = eliminateSpaces(cmd, flg);
+    instr.str(cmd);
+    instr.clear();
+    int check(0);
+    for (; getline(instr, toStr, ' '); )
     {
         if (!check)
         {
@@ -58,9 +58,15 @@ cmdInfos    placeParams(string & cmd, const string & nick)
             continue ;
         }
         save.push_back(toStr);
+        if (check == 1 && flg)
+        {
+            getline(instr, toStr);
+            if (toStr[0] != ':')
+                toStr.insert(0, ":");
+            save.push_back(toStr);
+            break ;
+        }
     }
-    if (flg)
-        save.push_back(NSplit);
     params.second = save;
     cout << "********** print data **********\n";
     cout << "cmd: " << params.first << '\n';
@@ -78,19 +84,11 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
 
     if (!cmd.empty())
     {
-        try
-        {
-            if (cmd[cmd.size() - 1] == '\n')
-                cmd.erase(cmd.size() - 1);
-            if (cmd[cmd.size() - 1] == '\r')
-                cmd.erase(cmd.size() - 1);
-            obj = placeParams(cmd, clients[fd].second.first);
-        }
-        catch(const exception & e)
-        {
-            _send(fd, e.what());
-            return ;
-        }
+        if (cmd[cmd.size() - 1] == '\n')
+            cmd.erase(cmd.size() - 1);
+        if (cmd[cmd.size() - 1] == '\r')
+            cmd.erase(cmd.size() - 1);
+        obj = placeParams(cmd);
     }
     Cmd command(obj, fd, ps, IP);
     command.executeCmd(clients[fd].second.first);
@@ -102,9 +100,7 @@ int    ValidString(const string s, bool flg)
 {
     int i = 0;
 
-    if (!flg && s[0] != ':')
-        return -1;
-    if (!flg)
+    if (!flg && s[0] == ':')
         i++;
     for (; i < int(s.length()); i++)
     {

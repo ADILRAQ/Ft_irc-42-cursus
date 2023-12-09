@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 21:29:20 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 11:18:47 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 08:48:53 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void    Cmd::PRIVMSG()
 		map<int, string>::iterator ite = var.end();
 
 		for (map<int, string>::iterator t = it; t != ite; t++)
-			serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
+			if (t->first != CurrentClientFD)
+				serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
 		return ;
 	}
 	ClientInfos clientFD = Client::getClient();

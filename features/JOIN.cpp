@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 15:06:49 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 08:56:13 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ void    Cmd::JOIN()
     map<int, string>::iterator it = var.begin();
     map<int, string>::iterator ite = var.end();
     for (map<int, string>::iterator t = it; t != ite; t++)
+        if (t->first != CurrentClientFD)
+            serverReplyFormat(t->first, save[CurrentClientFD].second, data);
+    for (map<int, string>::iterator t = it; t != ite; t++)
     {
         if (t == it)
             s += nick + " ";
@@ -96,9 +99,6 @@ void    Cmd::JOIN()
     _send(CurrentClientFD, ": 353 " + nick + " @ " + data.second[0] + " :" + s + "\r\n");
     _send(CurrentClientFD, ": 366 " + nick + " " + data.second[0] + " :End of /NAMES list.\r\n");
 
-    for (map<int, string>::iterator t = it; t != ite; t++)
-        if (t->first != CurrentClientFD)
-            serverReplyFormat(t->first, save[CurrentClientFD].second, data);
     vector<string>& sv =  currentChannel.getInviteD();
     if (keep['i'].first)
         sv.erase(find(sv.begin(), sv.end(), nick));
