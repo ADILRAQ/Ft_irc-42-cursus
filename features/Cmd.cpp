@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 13:32:33 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 13:52:24 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Cmd::BeginExec(int i)
     try
     {
         (this->*f[i])();
-        if (Client::getClient()[CurrentClientFD].first < 2 && i != 9 && i != 10)
+        if (Client::getClient()[CurrentClientFD].first < 3 && i != 9 && i != 10)
             ++Client::getClient()[CurrentClientFD].first;
     }
     catch(const exception& e)
