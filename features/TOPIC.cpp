@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 09:54:53 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 10:16:22 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void    Cmd::TOPIC()
     }
     catch (const exception & e)
     {
-        runtime_error(e.what());
+        throw runtime_error(e.what());
     }
 
     if (sz == 1)

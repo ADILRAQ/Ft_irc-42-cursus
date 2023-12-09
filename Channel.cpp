@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:47 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/02 10:53:21 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 10:15:36 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ unsigned int    ChannelExist(vector<Chan>& CurrentChannels, string & Name, strin
     toLowerString(Name);
     if (!sz)
         throw runtime_error(": 403 " + client + " " + Name + " :No such channel\r\n");
-
     for (; c < sz; c++)
     {
         if (CurrentChannels[c].getChannelName() == Name)
