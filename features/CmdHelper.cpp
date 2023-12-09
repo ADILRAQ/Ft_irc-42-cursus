@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 09:52:17 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 13:17:26 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,12 @@ cmdInfos    placeParams(string & cmd)
     string          toStr;
     bool            flg(false);
 
-    istringstream   instr(cmd);
-    getline(instr, toStr, ' ');
+    istringstream   in(cmd);
+    getline(in, toStr, ' ');
     if (toStr == "PRIVMSG" || toStr == "NOTICE" || toStr == "TOPIC" || toStr == "KICK")
         flg = true;
     cmd = eliminateSpaces(cmd, flg);
-    instr.str(cmd);
-    instr.clear();
+    istringstream   instr(cmd);
     int check(0);
     for (; getline(instr, toStr, ' '); )
     {

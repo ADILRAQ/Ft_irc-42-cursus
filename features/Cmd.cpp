@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 12:43:41 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 13:32:33 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void Cmd::BeginExec(int i)
     try
     {
         (this->*f[i])();
-        ++Client::getClient()[CurrentClientFD].first;
+        if (Client::getClient()[CurrentClientFD].first < 2 && i != 9 && i != 10)
+            ++Client::getClient()[CurrentClientFD].first;
     }
     catch(const exception& e)
     {
@@ -43,14 +44,15 @@ void Cmd::BeginExec(int i)
 
 void    Cmd::executeCmd(const string & nick)
 {
+    ClientInfos& CurrentClient = Client::getClient();
     string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "QUIT", "PART", "NOTICE", "BOT"};
-    ClientInfos CurrentClient = Client::getClient();
 
     if (data.first.empty())
     {
         BeginExec(9);
         return ;
     }
+
     if (CurrentClient.find(CurrentClientFD) == CurrentClient.end())
         Client::setClient(CurrentClientFD, "", "");
 
