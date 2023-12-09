@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 13:17:26 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:49:23 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ string    eliminateSpaces(string & str, const int & flg)
 
     for (unsigned int i = 0; i < str.length(); i++)
     {
-        if (check == 2 && flg && str[i] == ' ')
+        if ((check == 2 && flg == 1 && str[i] == ' ') || (check == 3 && flg == -1 && str[i] == ' '))
             ;
         else if (str[i] == ' ')
         {
@@ -39,12 +39,14 @@ cmdInfos    placeParams(string & cmd)
     cmdInfos        params;
     vector<string>  save;
     string          toStr;
-    bool            flg(false);
+    int             flg(0);
 
     istringstream   in(cmd);
     getline(in, toStr, ' ');
-    if (toStr == "PRIVMSG" || toStr == "NOTICE" || toStr == "TOPIC" || toStr == "KICK")
-        flg = true;
+    if (toStr == "PRIVMSG" || toStr == "NOTICE" || toStr == "TOPIC")
+        flg = 1;
+    else if (toStr == "KICK")
+        flg = -1;
     cmd = eliminateSpaces(cmd, flg);
     istringstream   instr(cmd);
     int check(0);
@@ -57,7 +59,7 @@ cmdInfos    placeParams(string & cmd)
             continue ;
         }
         save.push_back(toStr);
-        if (check == 1 && flg)
+        if ((check == 1 && flg == 1) || (check == 2 && flg == -1))
         {
             getline(instr, toStr);
             if (toStr[0] != ':')
@@ -65,6 +67,7 @@ cmdInfos    placeParams(string & cmd)
             save.push_back(toStr);
             break ;
         }
+        check++;
     }
     params.second = save;
     cout << "********** print data **********\n";

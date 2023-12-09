@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 13:52:24 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:17:10 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,4 @@ void    Cmd::executeCmd(const string & nick)
         }
     }
 }
+// kick and sending message when quiting and part

@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:32 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 10:04:23 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:58:26 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,18 @@ void    Cmd::NICK()
         vector<Chan> channel = Channel::getChannel();
         for (unsigned int i(0); i < channel.size(); i++)
         {
-            if (channel[i].getMembers().find(nick) != channel[i].getMembers().end())
+            memberInfo& saving = channel[i].getMembers();
+            if (saving.find(nick) != saving.end())
             {
-                channel[i].getMembers()[data.second[0]] = channel[i].getMembers().find(nick)->second;
-                channel[i].getMembers().erase(channel[i].getMembers().find(nick));
+                saving[data.second[0]] = saving.find(nick)->second;
+                saving.erase(saving.find(nick));
                 channel[i].getMembersFromFD()[CurrentClientFD] = data.second[0];
+                map<int, string> keep = channel[i].getMembersFromFD();
+                map<int, string>::iterator ic = keep.begin();
+                map<int, string>::iterator ice = keep.end();
+                for (map<int, string>::iterator c = ic; c != ice; c++)
+                    if (CurrentClientFD != c->first)
+                        serverReplyFormat(c->first, Client::getClient()[CurrentClientFD].second, data);
             }
         }
         serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data);
