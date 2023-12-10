@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 15:14:17 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:27:56 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ public:
         const cmdInfos& getCmdInfos() const;
         void            executeCmd(const string & nick);
         void            BeginExec(int i);
-        void            deleteFromChn(const string & nick, const unsigned int & index, const string cmd);
+        void            deleteFromChn(const string & nick, const unsigned int & index);
 
         void    PASS();
         void    USER();
@@ -67,5 +67,5 @@ void            checkKey(string key, const string & nick);
 void            checkLimit(string limit, const string & nick);
 unsigned int    checkChannel(const vector<string> & vc, const string & nick);
 unsigned int    checkTopic(const vector<string> & vc, const string & nick);
-int             ValidString(const string s, bool flg);
+int             ValidString(const string s);
 cmdInfos        placeParams(string & cmd, const string & nick);

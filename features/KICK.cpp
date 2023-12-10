@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:26 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 14:29:40 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:28:48 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void    Cmd::KICK()
     unsigned int sz = data.second.size();
     if (sz != 2 && sz != 3)
         throw runtime_error(": 461 " + nick + " :KICK Not enough parameters\r\n");
-    if (sz == 3 && ValidString(data.second[2], 0) < 0)
+    if (sz == 3 && ValidString(data.second[2]) < 0)
         throw runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
 
     unsigned int    ChannelIndex;

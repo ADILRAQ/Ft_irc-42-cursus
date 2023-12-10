@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:21 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/07 09:56:12 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:32:39 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,3 +48,4 @@ void    Cmd::INVITE()
 			break;
 	serverReplyFormat(t->first, CurrentClients[CurrentClientFD].second, data);
 }
+// to the inviter message

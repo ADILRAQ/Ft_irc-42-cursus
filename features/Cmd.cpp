@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 14:17:10 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:14:42 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ void    Cmd::executeCmd(const string & nick)
 
     if (data.first.empty())
     {
+        data.first = "QUIT";
+        vector<string> keeP;
+        keeP.push_back("Leaving...");
+        data.second = keeP;
         BeginExec(9);
         return ;
     }
@@ -60,7 +64,7 @@ void    Cmd::executeCmd(const string & nick)
     if (j < 3 && Which[j] == data.first)
         BeginExec(j);
     else if (j < 3 && Which[j] != data.first)
-        _send(CurrentClientFD, ": 451 :You have not registered in the right process\r\n");
+       _send(CurrentClientFD, ": 451 :You have not registered in the right process\r\n");
     else
     {
         for (int i = 0; i < 13; i++)
@@ -75,4 +79,3 @@ void    Cmd::executeCmd(const string & nick)
         }
     }
 }
-// kick and sending message when quiting and part

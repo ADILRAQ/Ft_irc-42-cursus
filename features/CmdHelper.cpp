@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 14:49:23 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:28:15 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ string    eliminateSpaces(string & str, const int & flg)
         {
             while (i < str.length() && str[i] == ' ')
                 i++;
-            ret.push_back(' ');
+            if (i !=  str.length())
+                ret.push_back(' ');
             check++;
         }
-        ret.push_back(str[i]);
+        if (i !=  str.length())
+            ret.push_back(str[i]);
     }
     str.clear();
     return ret;
@@ -98,17 +100,13 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
 
 /*********************************** Commands Syntax *****************************************/
 
-int    ValidString(const string s, bool flg)
+int    ValidString(const string s)
 {
     int i = 0;
 
-    if (!flg && s[0] == ':')
-        i++;
     for (; i < int(s.length()); i++)
     {
-        if (flg && s[i] == 32)
-            return -1;
-        if (s[i] < 32 || s[i] == 44 || s[i] == 58 || s[i] >= 127)
+        if (s[i] < 32 || s[i] >= 127)
             return -1;
     }
     return i;
@@ -153,7 +151,7 @@ unsigned int    checkChannel(const vector<string> & vc, const string & nick)
     if (vc[0].empty() || vc[0][0] != '#' || (sz == 2 && vc[1].empty()))
         throw runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
 
-    int i = ValidString(vc[0], true);
+    int i = ValidString(vc[0]);
     if (i < 0 || i > 50)
         throw runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
     return sz;
@@ -169,7 +167,7 @@ unsigned int    checkTopic(const vector<string> & vc, const string & nick)
     if (vc[0].empty() || (sz == 2 && vc[1].empty()))
         throw runtime_error(": 461 " + nick + " :TOPIC Not enough parameters\r\n");
 
-    if (sz == 2 && ValidString(vc[1], false) < 0)
+    if (sz == 2 && ValidString(vc[1]) < 0)
         throw runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
     return sz;
 }
