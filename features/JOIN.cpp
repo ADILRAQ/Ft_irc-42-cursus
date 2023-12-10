@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 08:56:13 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 14:28:49 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void    Cmd::JOIN()
     Chan& currentChannel = CurrentChannels[ChannelIndex];
     modeInfo& keep = CurrentChannels[ChannelIndex].getModes();
 
-    if ((sz == 2 && keep['k'].first == true && keep['k'].second != data.second[1]) || (sz == 2 && keep['k'].first == false))
+    if ((keep['k'].first == true && sz == 1) || (sz == 2 && keep['k'].first == true && keep['k'].second != data.second[1]) || (sz == 2 && keep['k'].first == false))
         throw runtime_error(": 475 " + nick + " :Cannot join channel (+k)\r\n");
     if (keep['i'].first && find(currentChannel.getInviteD().begin(), currentChannel.getInviteD().end(), nick) == currentChannel.getInviteD().end())
         throw runtime_error(": 473 " + nick + " :This channel is invite only\r\n");
