@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:39 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 13:06:45 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 14:23:00 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void    Cmd::deleteFromChn(const string & nick, const unsigned int & index)
     map<int, string>::iterator ic = memberS.begin();
     map<int, string>::iterator ice = memberS.end();
     for (map<int, string>::iterator c = ic; c != ice; c++)
-        serverReplyFormat(c->first, Client::getClient()[c->first].second, data);
+        serverReplyFormat(c->first, Client::getClient()[CurrentClientFD].second, data);
     channel[index].getMembersFromFD().erase(CurrentClientFD);
     channel[index].getMembers().erase(nick);
     if (channel[index].getMembers().size() == 0)
@@ -33,17 +33,15 @@ void    Cmd::deleteFromChn(const string & nick, const unsigned int & index)
         Channel::getChannel().erase(t);
     }
 }
- 
+
 void    Cmd::QUIT()
 {
     string & nick = Client::getClient()[CurrentClientFD].second.first;
-    vector<string> save;
-    serverReplyFormat(CurrentClientFD, Client::getClient()[CurrentClientFD].second, data);
-    Client::getClient().erase(CurrentClientFD);
     vector<Chan>& channel = Channel::getChannel();
     for (unsigned int i(0); i < channel.size(); i++)
         if (channel[i].getMembers().find(nick) != channel[i].getMembers().end())
             deleteFromChn(nick, i);
+    Client::getClient().erase(CurrentClientFD);
 }
 
 void    Cmd::PART()
