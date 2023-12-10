@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:21 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 09:32:39 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 10:45:17 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void    Cmd::INVITE()
 		throw runtime_error(": 482 " + nick + " :You're not channel operator\r\n");
 
 	CurrentChannels[ChannelIndex].setInviteD(data.second[0]);
-
 	ClientInfos clientFD = Client::getClient();
 	ClientInfos::iterator it = clientFD.begin();
 	ClientInfos::iterator ite = clientFD.end();
@@ -46,6 +45,6 @@ void    Cmd::INVITE()
 	for (; t != ite; t++)
 		if (data.second[0] == t->second.second.first)
 			break;
+	serverReplyFormat(CurrentClientFD, CurrentClients[CurrentClientFD].second, data);
 	serverReplyFormat(t->first, CurrentClients[CurrentClientFD].second, data);
 }
-// to the inviter message

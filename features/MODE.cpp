@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 13:13:58 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 11:17:50 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void    Cmd::MODE()
 {
     unsigned int    ChannelIndex;
-    bool            Set;
+    bool            Set, done(false);
     string          holder1, holder2, toS;
     vector<Chan>& CurrentChannels = Channel::getChannel();
     ClientInfos&  CurrentClients = Client::getClient();
@@ -44,6 +44,7 @@ void    Cmd::MODE()
         return ;
     for (unsigned int j(0); j < vc[1].size(); j++)
     {
+        cout << "JJJ " << j<<endl;
         if (!j && vc[1][j] != '+' && vc[1][j] != '-')
         {
             for (; vc[1][j] != '+' && vc[1][j] != '-' && j < vc[1].size(); j++)
@@ -58,8 +59,10 @@ void    Cmd::MODE()
             j++;
             for (; vc[1][j] != '+' && vc[1][j] != '-' && j < vc[1].size(); j++)
             {
+                cout << "JJJ2 " << j<<endl;
                 if (vc[1][j] != 'i' && vc[1][j] != 't' && vc[1][j] != 'k' && vc[1][j] != 'o' && vc[1][j] != 'l')
                     {_send(CurrentClientFD, ": 472 " + nick + " " + vc[1][j] + " :is unknown mode char to me\r\n"); continue;}
+                cout << "HERE " << index << " " << vc[index] <<endl;
                 if ((vc[1][j] == 'o' || (Set && (vc[1][j] == 'k' || vc[1][j] == 'l'))) && vc[index].empty())
                     {_send(CurrentClientFD, ": 461 " + nick + " :MODE Not enough parameters\r\n"); index++; continue;}
                 if (Set && vc[1][j] == 'k')
@@ -112,6 +115,7 @@ void    Cmd::MODE()
                 }
                 else
                     CurrentChannels[ChannelIndex].setModesStat(vc[1][j], Set, "");
+                done = true;
                 {toS.clear(); toS.push_back(vc[1][j]);}
                 if (Set)
                     holder1 += toS;
@@ -126,7 +130,8 @@ void    Cmd::MODE()
         }
         j--;
     }
-
+    if (!done)
+        return ;
     data.second.erase(data.second.begin() + 1, data.second.end());
     data.second.push_back(holder1 + " " + holder2);
 
