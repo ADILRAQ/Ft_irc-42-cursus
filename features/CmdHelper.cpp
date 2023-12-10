@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 09:28:15 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 14:56:50 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ int    ValidString(const string s)
 
     for (; i < int(s.length()); i++)
     {
-        if (s[i] < 32 || s[i] >= 127)
+        cout << "HERE " << static_cast<int>(s[i]) << endl;
+        if (s[i] >= 127)
             return -1;
     }
     return i;
@@ -197,7 +198,7 @@ void _send(int fd, string mess)
     send(fd, mess.c_str(), mess.length(), 0);
 }
 
-void serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params)
+void    Cmd::serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params)
 {
     string save;
 
@@ -207,5 +208,5 @@ void serverReplyFormat(const int &fd, const pair<string, string>& userInfo, cons
         if (i != params.second.size() - 1)
             save += " ";
     }
-    _send(fd, ":" + userInfo.first + "!" + userInfo.second + "@localhost " + params.first + " " + save + "\r\n");
+    _send(fd, ":" + userInfo.first + "!" + userInfo.second + "@" + host + " " + params.first + " " + save + "\r\n");
 }

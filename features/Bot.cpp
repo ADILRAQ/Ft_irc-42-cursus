@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:50:42 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 14:57:44 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	Cmd::BOT()
 		/****** sending ********/
 		string & nick = Client::getClient()[CurrentClientFD].second.first;
 		string & user = Client::getClient()[CurrentClientFD].second.second;
-		_send(CurrentClientFD, ":" + nick + "!" + user + "@localhost " + "NOTICE" + " " + nick + " " + message + "\r\n");
+		_send(CurrentClientFD, ":" + nick + "!" + user + "@" + host + " " + "NOTICE" + " " + nick + " " + message + "\r\n");
 		/**********************/
 		close(hostSocket);
 	}
