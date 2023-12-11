@@ -6,15 +6,15 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 10:57:41 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:18:24 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
 
-string    eliminateSpaces(string & str, const int & flg)
+std::string    eliminateSpaces(std::string & str, const int & flg)
 {
-    string  ret;
+    std::string  ret;
     int     check(0);
 
     for (unsigned int i = 0; i < str.length(); i++)
@@ -36,23 +36,23 @@ string    eliminateSpaces(string & str, const int & flg)
     return ret;
 }
 
-cmdInfos    placeParams(string & cmd)
+cmdInfos    placeParams(std::string & cmd)
 {
     cmdInfos        params;
-    vector<string>  save;
-    string          toStr;
+    std::vector<std::string>  save;
+    std::string          toStr;
     int             flg(0);
 
-    istringstream   in(cmd);
-    getline(in, toStr, ' ');
+    std::stringstream   in(cmd);
+    std::getline(in, toStr, ' ');
     if (toStr == "PRIVMSG" || toStr == "NOTICE" || toStr == "TOPIC")
         flg = 1;
     else if (toStr == "KICK")
         flg = -1;
     cmd = eliminateSpaces(cmd, flg);
-    istringstream   instr(cmd);
+    std::stringstream  instr(cmd);
     int check(0);
-    for (; getline(instr, toStr, ' '); )
+    for (; std::getline(instr, toStr, ' '); )
     {
         if (!check)
         {
@@ -63,7 +63,7 @@ cmdInfos    placeParams(string & cmd)
         save.push_back(toStr);
         if ((check == 1 && flg == 1) || (check == 2 && flg == -1))
         {
-            getline(instr, toStr);
+            std::getline(instr, toStr);
             if (toStr[0] != ':')
                 toStr.insert(0, ":");
             save.push_back(toStr);
@@ -72,19 +72,19 @@ cmdInfos    placeParams(string & cmd)
         check++;
     }
     params.second = save;
-    cout << "********** print data **********\n";
-    cout << "cmd: " << params.first << '\n';
+    std::cout << "********** print data **********\n";
+    std::cout << "cmd: " << params.first << '\n';
     for (unsigned int i(0); i < params.second.size(); i++)
-        cout << '\"' << params.second[i] << "\" ";
-    cout << "\n********** End **********\n";
+        std::cout << '\"' << params.second[i] << "\" ";
+    std::cout << "\n********** End **********\n";
     return params;
 }
 
-void    placeCmds(string cmd, int fd, const char * passwd, string IP)
+void    placeCmds(std::string cmd, int fd, const char * passwd, std::string IP)
 {
     cmdInfos    obj;
     ClientInfos clients = Client::getClient();
-    string ps(passwd);
+    std::string ps(passwd);
 
     if (!cmd.empty())
     {
@@ -100,7 +100,7 @@ void    placeCmds(string cmd, int fd, const char * passwd, string IP)
 
 /*********************************** Commands Syntax *****************************************/
 
-int    ValidString(const string s)
+int    ValidString(const std::string s)
 {
     int i = 0;
 
@@ -110,101 +110,100 @@ int    ValidString(const string s)
     return i;
 } 
 
-void    checkParamsUser(const vector<string> & vc, const string & nick)
+void    checkParamsUser(const std::vector<std::string> & vc, const std::string & nick)
 {
     if ((vc.size() != 1 && vc.size() != 4) || vc[0].empty())
-        throw runtime_error(": 461 " + nick + " :USER Not enough parameters\r\n");
+        throw std::runtime_error(": 461 " + nick + " :USER Not enough parameters\r\n");
 
     unsigned int i = 0;
     for (; i < vc[0].length(); i++)
         if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
-            throw runtime_error(": 432" + nick + " :Non valid character\r\n");
+            throw std::runtime_error(": 432" + nick + " :Non valid character\r\n");
 
     if (i > 9)
-        throw runtime_error(": 432 " + nick + " :Passed the valid length\r\n");
+        throw std::runtime_error(": 432 " + nick + " :Passed the valid length\r\n");
 }
 
-void    checkParamsNick(const vector<string> & vc)
+void    checkParamsNick(const std::vector<std::string> & vc)
 {
     if (vc.size() != 1 || vc[0].empty())
-        throw runtime_error(": 461 :NICK Not enough parameters\r\n");
+        throw std::runtime_error(": 461 :NICK Not enough parameters\r\n");
 
     unsigned int i = 0;
     if (isdigit(vc[0][i]) || vc[0][0] == '-')
-        throw runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
+        throw std::runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
     for (; i < vc[0].length(); i++)
         if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
-            throw runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
+            throw std::runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
 
     if (i > 9)
-        throw runtime_error(": 432 " + vc[0] + " :Erroneous Nickname\r\n");
+        throw std::runtime_error(": 432 " + vc[0] + " :Erroneous Nickname\r\n");
 }
 
-unsigned int    checkChannel(const vector<string> & vc, const string & nick)
+unsigned int    checkChannel(const std::vector<std::string> & vc, const std::string & nick)
 {
     unsigned int sz = vc.size();
     if (sz != 1 && sz != 2)
-        throw runtime_error(": 461 " + nick + " :JOIN Not enough parameters\r\n");
+        throw std::runtime_error(": 461 " + nick + " :JOIN Not enough parameters\r\n");
 
     if (vc[0].empty() || vc[0][0] != '#' || (sz == 2 && vc[1].empty()))
-        throw runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
+        throw std::runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
 
     int i = ValidString(vc[0]);
     if (i < 0 || i > 50)
-        throw runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
+        throw std::runtime_error(": 403 " + vc[0] + " :No such channel\r\n");
     return sz;
 }
 
-unsigned int    checkTopic(const vector<string> & vc, const string & nick)
+unsigned int    checkTopic(const std::vector<std::string> & vc, const std::string & nick)
 {
     unsigned int sz = vc.size();
 
     if (sz != 1 && sz != 2)
-        throw runtime_error(": 461 " + nick + " :TOPIC Not enough parameters\r\n");
+        throw std::runtime_error(": 461 " + nick + " :TOPIC Not enough parameters\r\n");
 
     if (vc[0].empty() || (sz == 2 && vc[1].empty()))
-        throw runtime_error(": 461 " + nick + " :TOPIC Not enough parameters\r\n");
+        throw std::runtime_error(": 461 " + nick + " :TOPIC Not enough parameters\r\n");
 
     if (sz == 2 && ValidString(vc[1]) < 0)
-        throw runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
+        throw std::runtime_error(": 461 " + nick + " :Non valid character(s)\r\n");
     return sz;
 }
 
-void    checkKey(string key, const string & nick)
+void    checkKey(std::string key, const std::string & nick)
 {
     for (unsigned int i(0); i < key.length(); i++)
         if (!isalpha(key[i]))
-            throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
+            throw std::runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 }
 
-void    checkLimit(string limit, const string & nick)
+void    checkLimit(std::string limit, const std::string & nick)
 {
     for (unsigned int i(0); i < limit.length(); i++)
         if (!isdigit(limit[i]))
-            throw runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
+            throw std::runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
 }
 
-void    toLowerString(string & s)
+void    toLowerString(std::string & s)
 {
     for (unsigned int i(0); i < s.length(); i++)
         s[i] = tolower(s[i]);
 }
 
-void _send(int fd, string mess)
+void _send(int fd, std::string mess)
 {
     send(fd, mess.c_str(), mess.length(), 0);
 }
 
-void    Cmd::serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params)
+void    Cmd::serverReplyFormat(const int &fd, const std::pair<std::string, std::string>& userInfo, const cmdInfos& params)
 {
-    string save;
-cout << "IPPPPPP " << host << endl;
+    std::string save;
+
     for (unsigned int i(0); i < params.second.size(); i++)
     {
         save += params.second[i];
         if (i != params.second.size() - 1)
             save += " ";
     }
-    cout << "CMD " <<  ":" + userInfo.first + "!" + userInfo.second + "@" + host + " " + params.first + " " + save + "\r\n"<<endl;
     _send(fd, ":" + userInfo.first + "!" + userInfo.second + "@" + host + " " + params.first + " " + save + "\r\n");
 }

@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   startServer.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:59:48 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:14:43 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MainHeader.hpp"
+#include"Server.hpp"
+#include"features/Cmd.hpp"
 
 void	startServer(char *port, char *pswd)
 {
@@ -49,10 +51,10 @@ void	startServer(char *port, char *pswd)
 						serv.getRequest(i) += message;
 						if (serv.getRequest(i)[0] != '\n' && *(serv.getRequest(i).end() - 1) == '\n')
 						{
-							cout << COLOR_YELLOW << "INCOMIG DATA: " << serv.getRequest(i) << COLOR_RESET << endl;
+							std::cout << COLOR_YELLOW << "INCOMIG DATA: " << serv.getRequest(i) << COLOR_RESET << std::endl;
 							std::istringstream	CompleteMes(serv.getRequest(i));
 							std::string			line;
-							while (getline(CompleteMes, line))
+							while (std::getline(CompleteMes, line))
 							{
 								std::cout << COLOR_GREEN << "\tLINE: " << line  << "  " << COLOR_RESET << std::endl;
 								if (line.substr(0, line.find(' ')) == "QUIT")

@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:37 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 09:34:50 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 13:49:39 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 void    Cmd::PASS()
 {
-    string & nick = Client::getClient()[CurrentClientFD].second.first;
+    std::string & nick = Client::getClient()[CurrentClientFD].second.first;
 
     if (data.second.size() != 1)
-        throw runtime_error(": 461 " + nick + " :PASS Not enough parameters\r\n");
+        throw std::runtime_error(": 461 " + nick + " :PASS Not enough parameters\r\n");
 
     if (Client::getClient()[CurrentClientFD].first >= 3)
-        throw runtime_error(": 462 " + nick + " :You may not reregister\r\n");
+        throw std::runtime_error(": 462 " + nick + " :You may not reregister\r\n");
 
     if (data.second[0] != pass)
-        throw runtime_error(": 464 " + nick + " :PASS Password incorrect\r\n");
+        throw std::runtime_error(": 464 " + nick + " :PASS Password incorrect\r\n");
 
     return ;
 }

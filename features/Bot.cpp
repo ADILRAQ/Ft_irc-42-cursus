@@ -6,11 +6,12 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 15:01:22 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:15:45 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cmd.hpp"
+#include"../Server.hpp"
 
 const char	*API_HOST = "api.weatherapi.com";
 const char	*API_PATH = "/v1/current.json";
@@ -114,8 +115,8 @@ void	Cmd::BOT()
 			message = ":" + getValue(help, "\"message\":");
 		std::cout << COLOR_GREEN << message << COLOR_RESET << std::endl;
 		/****** sending ********/
-		string & nick = Client::getClient()[CurrentClientFD].second.first;
-		string & user = Client::getClient()[CurrentClientFD].second.second;
+		std::string & nick = Client::getClient()[CurrentClientFD].second.first;
+		std::string & user = Client::getClient()[CurrentClientFD].second.second;
 		_send(CurrentClientFD, ":" + nick + "!" + user + "@" + host + " " + "NOTICE" + " " + nick + " " + message + "\r\n");
 		/**********************/
 		close(hostSocket);

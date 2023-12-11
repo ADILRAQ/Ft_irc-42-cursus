@@ -6,18 +6,17 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 14:56:28 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:16:24 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once 
 
-#include"../header.hpp"
+#include"../MainHeader.hpp"
 #include"../Client.hpp"
 #include"../Channel.hpp"
-#include"../MainHeader.hpp"
 
-typedef pair<string, vector<string> > cmdInfos;
+typedef std::pair<std::string, std::vector<std::string> > cmdInfos;
 
 /************* Command holder *************/
 
@@ -26,18 +25,18 @@ class Cmd
 private:
         cmdInfos        data;
         int             CurrentClientFD;
-        string          &pass;
-        string          &host;
+        std::string          &pass;
+        std::string          &host;
 
 public:
-        Cmd(cmdInfos& obj, int& fd, string &passwd, string &hst);
+        Cmd(cmdInfos& obj, int& fd, std::string &passwd, std::string &hst);
         ~Cmd();
 
         const cmdInfos& getCmdInfos() const;
-        void            executeCmd(const string & nick);
+        void            executeCmd(const std::string & nick);
         void            BeginExec(int i);
-        void            deleteFromChn(const string & nick, const unsigned int & index);
-        void            serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params);
+        void            deleteFromChn(const std::string & nick, const unsigned int & index);
+        void            serverReplyFormat(const int &fd, const std::pair<std::string, std::string>& userInfo, const cmdInfos& params);
 
         void    PASS();
         void    USER();
@@ -58,15 +57,15 @@ typedef void (Cmd::*cmdFunc)();
 
 /************* Helper Functions *************/
 
-void            checkParamsUser(const vector<string> & vc, const string & nick);
-void            checkParamsNick(const vector<string> & vc);
-void            toLowerString(string & s);
-void            placeCmds(string cmd, int fd, const char * passwd, string IP);
-void            _send(int fd, string mess);
-void            serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params);
-void            checkKey(string key, const string & nick);
-void            checkLimit(string limit, const string & nick);
-unsigned int    checkChannel(const vector<string> & vc, const string & nick);
-unsigned int    checkTopic(const vector<string> & vc, const string & nick);
-int             ValidString(const string s);
-cmdInfos        placeParams(string & cmd, const string & nick);
+void            checkParamsUser(const std::vector<std::string> & vc, const std::string & nick);
+void            checkParamsNick(const std::vector<std::string> & vc);
+void            toLowerString(std::string & s);
+void            placeCmds(std::string cmd, int fd, const char * passwd, std::string IP);
+void            _send(int fd, std::string mess);
+void            serverReplyFormat(const int &fd, const std::pair<std::string, std::string>& userInfo, const cmdInfos& params);
+void            checkKey(std::string key, const std::string & nick);
+void            checkLimit(std::string limit, const std::string & nick);
+unsigned int    checkChannel(const std::vector<std::string> & vc, const std::string & nick);
+unsigned int    checkTopic(const std::vector<std::string> & vc, const std::string & nick);
+int             ValidString(const std::string s);
+cmdInfos        placeParams(std::string & cmd, const std::string & nick);

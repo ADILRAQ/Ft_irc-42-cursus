@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:32 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 09:34:30 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 13:51:30 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ void    Cmd::NICK()
         for (ClientInfos::iterator t = it; t != ite; t++)
         {
             if (CurrentClientFD != t->first && ((t->second).second.first == data.second[0]))
-                throw runtime_error(": 433 " + (t->second).second.second + " :Nickname is already in use\r\n");
+                throw std::runtime_error(": 433 " + (t->second).second.second + " :Nickname is already in use\r\n");
         }
     }
-    catch(const exception& e)
+    catch(const std::exception& e)
     {
-        throw runtime_error(e.what());
+        throw std::runtime_error(e.what());
     }
 
-    string& nick = Client::getClient()[CurrentClientFD].second.first;
+    std::string& nick = Client::getClient()[CurrentClientFD].second.first;
     if (!nick.empty())
     {
-        vector<Chan> channel = Channel::getChannel();
+        std::vector<Chan> channel = Channel::getChannel();
         for (unsigned int i(0); i < channel.size(); i++)
         {
             memberInfo& saving = channel[i].getMembers();
@@ -43,10 +43,10 @@ void    Cmd::NICK()
                 saving[data.second[0]] = saving.find(nick)->second;
                 saving.erase(saving.find(nick));
                 channel[i].getMembersFromFD()[CurrentClientFD] = data.second[0];
-                map<int, string> keep = channel[i].getMembersFromFD();
-                map<int, string>::iterator ic = keep.begin();
-                map<int, string>::iterator ice = keep.end();
-                for (map<int, string>::iterator c = ic; c != ice; c++)
+                std::map<int, std::string> keep = channel[i].getMembersFromFD();
+                std::map<int, std::string>::iterator ic = keep.begin();
+                std::map<int, std::string>::iterator ice = keep.end();
+                for (std::map<int, std::string>::iterator c = ic; c != ice; c++)
                     if (CurrentClientFD != c->first)
                         serverReplyFormat(c->first, Client::getClient()[CurrentClientFD].second, data);
             }

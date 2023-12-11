@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRC.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 10:06:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/03 11:09:00 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:07:53 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	Port(char *str)
 {
-	stringstream	ss(str);
+	std::stringstream	ss(str);
 	int				port;
 	int				i = -1;
 
@@ -81,6 +81,6 @@ int	main(int ac, char **av)
 		}
 	}
 	else
-		cout << "Error: NB of args" << endl;
+		std::cout << "Error: NB of args" << std::endl;
 	return (1);
 }

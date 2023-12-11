@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 15:04:49 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 13:51:40 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 void    Cmd::JOIN()
 {
     unsigned int    sz;
-    string          s, holder1, holder2;
+    std::string          s, holder1, holder2;
     ClientInfos save = Client::getClient();
-    string&     nick = save[CurrentClientFD].second.first;
+    std::string&     nick = save[CurrentClientFD].second.first;
 
     try
     {
         sz = checkChannel(data.second, nick);
     }
-    catch(const exception& e)
+    catch(const std::exception& e)
     {
-        throw runtime_error(e.what());
+        throw std::runtime_error(e.what());
     }
 
-    vector<Chan>& CurrentChannels = Channel::getChannel();
+    std::vector<Chan>& CurrentChannels = Channel::getChannel();
     unsigned int ChannelIndex;
     bool flg = 0;
     try
@@ -55,22 +55,22 @@ void    Cmd::JOIN()
     modeInfo& keep = CurrentChannels[ChannelIndex].getModes();
 
     if ((keep['k'].first == true && sz == 1) || (sz == 2 && keep['k'].first == true && keep['k'].second != data.second[1]) || (sz == 2 && keep['k'].first == false))
-        throw runtime_error(": 475 " + nick + " :Cannot join channel (+k)\r\n");
+        throw std::runtime_error(": 475 " + nick + " :Cannot join channel (+k)\r\n");
     if (keep['i'].first && find(currentChannel.getInviteD().begin(), currentChannel.getInviteD().end(), nick) == currentChannel.getInviteD().end())
-        throw runtime_error(": 473 " + nick + " :This channel is invite only\r\n");
+        throw std::runtime_error(": 473 " + nick + " :This channel is invite only\r\n");
     if (keep['l'].first && currentChannel.getMembersFromFD().size() >= currentChannel.getLimit())
-        throw runtime_error(": 471 " + nick + " :Channel is full\r\n");
+        throw std::runtime_error(": 471 " + nick + " :Channel is full\r\n");
 
     currentChannel.setMember(nick, CurrentClientFD);
     serverReplyFormat(CurrentClientFD, save[CurrentClientFD].second, data);
     memberInfo trav = currentChannel.getMembers();
-    map<int, string> var = currentChannel.getMembersFromFD();
-    map<int, string>::iterator it = var.begin();
-    map<int, string>::iterator ite = var.end();
-    for (map<int, string>::iterator t = it; t != ite; t++)
+    std::map<int, std::string> var = currentChannel.getMembersFromFD();
+    std::map<int, std::string>::iterator it = var.begin();
+    std::map<int, std::string>::iterator ite = var.end();
+    for (std::map<int, std::string>::iterator t = it; t != ite; t++)
         if (t->first != CurrentClientFD)
             serverReplyFormat(t->first, save[CurrentClientFD].second, data);
-    for (map<int, string>::iterator t = it; t != ite; t++)
+    for (std::map<int, std::string>::iterator t = it; t != ite; t++)
     {
         if (t == it)
             s += nick + " ";
@@ -100,7 +100,7 @@ void    Cmd::JOIN()
     _send(CurrentClientFD, ": 353 " + nick + " @ " + data.second[0] + " :" + s + "\r\n");
     _send(CurrentClientFD, ": 366 " + nick + " " + data.second[0] + " :End of /NAMES list.\r\n");
 
-    vector<string>& sv =  currentChannel.getInviteD();
+    std::vector<std::string>& sv =  currentChannel.getInviteD();
     if (keep['i'].first)
         sv.erase(find(sv.begin(), sv.end(), nick));
 }
