@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdHelper.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 14:56:50 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 09:59:25 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int    ValidString(const string s)
 
     for (; i < int(s.length()); i++)
     {
-        cout << "HERE " << static_cast<int>(s[i]) << endl;
+        // cout << "HERE " << static_cast<int>(s[i]) << endl;
         if (s[i] >= 127)
             return -1;
     }

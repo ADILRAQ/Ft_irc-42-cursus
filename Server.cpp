@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:59:20 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 10:46:03 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	Server::SAccept(void)
 		help.fd = newSocket;
 		Sockaddr_in	PrintIP;
 		memcpy(&PrintIP.sin_addr, &inData, inData.ss_len);
-		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << ":" << ntohs(PrintIP.sin_port) << COLOR_RESET << std::endl;
+		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << COLOR_RESET << std::endl;
 		std::string	IPaddr(inet_ntoa(PrintIP.sin_addr));
 		help.events = POLLIN;
 		help.revents = 0;

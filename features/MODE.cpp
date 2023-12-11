@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 11:17:50 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 09:59:30 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void    Cmd::MODE()
                 cout << "JJJ2 " << j<<endl;
                 if (vc[1][j] != 'i' && vc[1][j] != 't' && vc[1][j] != 'k' && vc[1][j] != 'o' && vc[1][j] != 'l')
                     {_send(CurrentClientFD, ": 472 " + nick + " " + vc[1][j] + " :is unknown mode char to me\r\n"); continue;}
-                cout << "HERE " << index << " " << vc[index] <<endl;
+                // cout << "HERE " << index << " " << vc[index] <<endl;
                 if ((vc[1][j] == 'o' || (Set && (vc[1][j] == 'k' || vc[1][j] == 'l'))) && vc[index].empty())
                     {_send(CurrentClientFD, ": 461 " + nick + " :MODE Not enough parameters\r\n"); index++; continue;}
                 if (Set && vc[1][j] == 'k')
