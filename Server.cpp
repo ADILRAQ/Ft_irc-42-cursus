@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:59:20 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 11:17:41 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,24 +124,22 @@ int	Server::SPoll(void)
 
 void	Server::SAccept(void)
 {
-	SStorage	inData;
+	sockaddr_in	inData;
 	socklen_t	sizeStruct = sizeof(SStorage);
 	int			newSocket;
 	Pollfd		help;
 
 	if (Sockets.size() <= SIZE)
 	{
-		newSocket = accept(Sockets[0].fd, (struct sockaddr *)&inData, &sizeStruct);
+		newSocket = accept(Sockets[0].fd, reinterpret_cast<struct sockaddr *>(&inData), &sizeStruct);
 		if (newSocket < 0)
 		{
 			perror(COLOR_RED "Accept " COLOR_RESET);
 			throw (-1);
 		}
 		help.fd = newSocket;
-		Sockaddr_in	PrintIP;
-		memcpy(&PrintIP.sin_addr, &inData, inData.ss_len);
-		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << ":" << ntohs(PrintIP.sin_port) << COLOR_RESET << std::endl;
-		std::string	IPaddr(inet_ntoa(PrintIP.sin_addr));
+		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(inData.sin_addr) << ":" << ntohs(inData.sin_port) << COLOR_RESET << std::endl;
+		std::string	IPaddr(inet_ntoa(inData.sin_addr));
 		help.events = POLLIN;
 		help.revents = 0;
 		Sockets.push_back(help);

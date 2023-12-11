@@ -6,14 +6,11 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 14:57:44 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/10 15:01:22 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cmd.hpp"
-
-// data.fisrt = cmd
-// data.second[vector] == args
 
 const char	*API_HOST = "api.weatherapi.com";
 const char	*API_PATH = "/v1/current.json";
