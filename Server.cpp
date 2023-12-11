@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 10:46:03 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 13:59:11 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ Server::Server(std::string const &port) : Address(NULL)
 		throw -1;
 	}
 	Sockaddr_in	*ptr = (Sockaddr_in *)Address->ai_addr;
-	std::cout << COLOR_GREEN << "MainSocket: " << help.fd << "  " << inet_ntoa(ptr->sin_addr) << ":" << ntohs(ptr->sin_port) << COLOR_RESET << std::endl;
 	std::cout << std::endl;
 	help.events = POLLIN;
 	help.revents = 0;
 	Sockets.push_back(help);
-	Request.push_back("");
 	this->NonBlockMode();
 }
 
@@ -85,7 +83,8 @@ short	Server::getRevents(size_t i)
 
 std::string	&Server::getRequest(size_t i)
 {
-	return (Request[i]);
+	std::cout << "I: " << (i - 1) << std::endl;
+	return (Request[i - 1]);
 }
 
 size_t	Server::getSize(void) const
@@ -124,32 +123,25 @@ int	Server::SPoll(void)
 
 void	Server::SAccept(void)
 {
-	SStorage	inData;
-	socklen_t	sizeStruct = sizeof(SStorage);
+	Sockaddr_in	inData;
+	socklen_t	sizeStruct = sizeof(Sockaddr_in);
 	int			newSocket;
 	Pollfd		help;
 
-	if (Sockets.size() <= SIZE)
+	newSocket = accept(Sockets[0].fd, reinterpret_cast<struct sockaddr *>(&inData), &sizeStruct);
+	if (newSocket < 0)
 	{
-		newSocket = accept(Sockets[0].fd, (struct sockaddr *)&inData, &sizeStruct);
-		if (newSocket < 0)
-		{
-			perror(COLOR_RED "Accept " COLOR_RESET);
-			throw (-1);
-		}
-		help.fd = newSocket;
-		Sockaddr_in	PrintIP;
-		memcpy(&PrintIP.sin_addr, &inData, inData.ss_len);
-		std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(PrintIP.sin_addr) << COLOR_RESET << std::endl;
-		std::string	IPaddr(inet_ntoa(PrintIP.sin_addr));
-		help.events = POLLIN;
-		help.revents = 0;
-		Sockets.push_back(help);
-		SockAddrInfo.push_back(IPaddr);
-		Request.push_back("");
+		perror(COLOR_RED "Accept " COLOR_RESET);
+		throw (-1);
 	}
-	else
-		std::cout << "Connection Not Accepeted!" << std::endl;
+	help.fd = newSocket;
+	std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(inData.sin_addr) << ":" << ntohs(inData.sin_port) << COLOR_RESET << std::endl;
+	std::string	IPaddr(inet_ntoa(inData.sin_addr));
+	help.events = POLLIN;
+	help.revents = 0;
+	Sockets.push_back(help);
+	SockAddrInfo.push_back(IPaddr);
+	Request.push_back("");
 }
 
 void	Server::SClose(size_t i)
@@ -158,7 +150,7 @@ void	Server::SClose(size_t i)
 	close(Sockets[i].fd);
 	Sockets.erase(Sockets.begin() + i);
 	SockAddrInfo.erase(SockAddrInfo.begin() + i - 1);
-	Request.erase(Request.begin() + i);
+	Request.erase(Request.begin() + i - 1);
 }
 
 std::string const	&Server::getIP(size_t i) const

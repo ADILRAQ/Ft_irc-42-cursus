@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 09:59:25 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 11:38:44 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ int    ValidString(const string s)
 
     for (; i < int(s.length()); i++)
     {
-        // cout << "HERE " << static_cast<int>(s[i]) << endl;
         if (s[i] >= 127)
             return -1;
     }
@@ -201,12 +200,13 @@ void _send(int fd, string mess)
 void    Cmd::serverReplyFormat(const int &fd, const pair<string, string>& userInfo, const cmdInfos& params)
 {
     string save;
-
+cout << "IPPPPPP " << host << endl;
     for (unsigned int i(0); i < params.second.size(); i++)
     {
         save += params.second[i];
         if (i != params.second.size() - 1)
             save += " ";
     }
+    cout << "CMD " <<  ":" + userInfo.first + "!" + userInfo.second + "@" + host + " " + params.first + " " + save + "\r\n"<<endl;
     _send(fd, ":" + userInfo.first + "!" + userInfo.second + "@" + host + " " + params.first + " " + save + "\r\n");
 }

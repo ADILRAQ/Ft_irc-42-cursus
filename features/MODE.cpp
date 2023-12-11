@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 09:59:30 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 11:38:56 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void    Cmd::MODE()
         return ;
     for (unsigned int j(0); j < vc[1].size(); j++)
     {
-        cout << "JJJ " << j<<endl;
         if (!j && vc[1][j] != '+' && vc[1][j] != '-')
         {
             for (; vc[1][j] != '+' && vc[1][j] != '-' && j < vc[1].size(); j++)
@@ -59,7 +58,6 @@ void    Cmd::MODE()
             j++;
             for (; vc[1][j] != '+' && vc[1][j] != '-' && j < vc[1].size(); j++)
             {
-                cout << "JJJ2 " << j<<endl;
                 if (vc[1][j] != 'i' && vc[1][j] != 't' && vc[1][j] != 'k' && vc[1][j] != 'o' && vc[1][j] != 'l')
                     {_send(CurrentClientFD, ": 472 " + nick + " " + vc[1][j] + " :is unknown mode char to me\r\n"); continue;}
                 // cout << "HERE " << index << " " << vc[index] <<endl;

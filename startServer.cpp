@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 12:54:53 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/08 10:59:48 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 13:59:36 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	startServer(char *port, char *pswd)
 	serv.SListen();
 	while (true)
 	{
-		// check = 0;
 		if ((check = serv.SPoll()) == -1)
 		{
 			perror(COLOR_RED "Poll " COLOR_RESET);
@@ -32,12 +31,12 @@ void	startServer(char *port, char *pswd)
 		{
 			for (size_t i = 0; i < serv.getSize(); i++)
 			{
-				if (i == 0 && serv.getRevents(i) & POLLIN)
+				if (!i && serv.getRevents(i) & POLLIN)
 					serv.SAccept();
-				else if (serv.getRevents(i) & POLLIN)
+				else if (i && serv.getRevents(i) & POLLIN)
 				{
 					memset(req, '\0', BUFFER_SIZE);
-					if ((status = recv(serv.getFD(i), req, BUFFER_SIZE, 0)) == -1)
+					if ((status = recv(serv.getFD(i), req, BUFFER_SIZE, 0)) < 0)
 					{
 						perror(COLOR_RED "RECV " COLOR_RESET);
 						throw (-1);
@@ -57,7 +56,7 @@ void	startServer(char *port, char *pswd)
 								std::cout << COLOR_GREEN << "\tLINE: " << line  << "  " << COLOR_RESET << std::endl;
 								if (line.substr(0, line.find(' ')) == "QUIT")
 								{
-									status = 0; // To enter the next condition
+									status = 0;
 									break ;
 								}
 								placeCmds(line, serv.getFD(i), pswd, serv.getIP(i));
@@ -68,7 +67,6 @@ void	startServer(char *port, char *pswd)
 					}
 					if (!status)
 					{
-						// To Delete the user
 						placeCmds("", serv.getFD(i), pswd, "");
 						serv.SClose(i);
 					}
