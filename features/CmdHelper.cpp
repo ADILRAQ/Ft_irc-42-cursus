@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 14:33:43 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 16:49:19 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,18 +170,11 @@ unsigned int    checkTopic(const std::vector<std::string> & vc, const std::strin
     return sz;
 }
 
-void    checkKey(std::string key, const std::string & nick)
-{
-    for (unsigned int i(0); i < key.length(); i++)
-        if (!isalpha(key[i]))
-            throw std::runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
-}
-
 void    checkLimit(std::string limit, const std::string & nick)
 {
     for (unsigned int i(0); i < limit.length(); i++)
         if (!isdigit(limit[i]))
-            throw std::runtime_error(": 461 " + nick + " :MODE Not enough parameters\r\n");
+            throw std::runtime_error(": 696 " + nick + " :MODE l " + limit + " Invalid limit mode parameter. Syntax: <limit>.\r\n");
 }
 
 void    toLowerString(std::string & s)

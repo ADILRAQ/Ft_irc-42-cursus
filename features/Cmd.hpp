@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:09 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 14:16:24 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 16:49:37 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void            toLowerString(std::string & s);
 void            placeCmds(std::string cmd, int fd, const char * passwd, std::string IP);
 void            _send(int fd, std::string mess);
 void            serverReplyFormat(const int &fd, const std::pair<std::string, std::string>& userInfo, const cmdInfos& params);
-void            checkKey(std::string key, const std::string & nick);
 void            checkLimit(std::string limit, const std::string & nick);
 unsigned int    checkChannel(const std::vector<std::string> & vc, const std::string & nick);
 unsigned int    checkTopic(const std::vector<std::string> & vc, const std::string & nick);

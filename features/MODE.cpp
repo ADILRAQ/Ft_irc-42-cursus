@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 13:55:10 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 16:54:05 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,13 @@ void    Cmd::MODE()
                 if (vc[1][j] != 'i' && vc[1][j] != 't' && vc[1][j] != 'k' && vc[1][j] != 'o' && vc[1][j] != 'l')
                     {_send(CurrentClientFD, ": 472 " + nick + " " + vc[1][j] + " :is unknown mode char to me\r\n"); continue;}
                 if ((vc[1][j] == 'o' || (Set && (vc[1][j] == 'k' || vc[1][j] == 'l'))) && vc[index].empty())
-                    {_send(CurrentClientFD, ": 461 " + nick + " :MODE Not enough parameters\r\n"); index++; continue;}
+                    {std::cout << vc[1][j] << " " << index << std::endl;_send(CurrentClientFD, ": 696 " + nick + " :MODE You must specify a parameter for the mode flag\r\n"); index++; continue;}
                 if (Set && vc[1][j] == 'k')
                 {
                     if (CurrentChannels[ChannelIndex].getModes()['k'].first)
                         {_send(CurrentClientFD, ": 467 " + nick + " " + vc[0] + " :Channel key already set\r\n"); continue;}
-                    try
-                    {
-                        checkKey(vc[index], nick);
-                        CurrentChannels[ChannelIndex].setModesStat('k', true, vc[index]);
-                        flg = 1;
-                    }
-                    catch (const std::exception & e)
-                    {
-                        _send(CurrentClientFD, e.what());
-                        index++;
-                        continue ;
-                    }
+                    CurrentChannels[ChannelIndex].setModesStat('k', true, vc[index]);
+                    flg = 1;
                 }
                 else if (Set && vc[1][j] == 'l')
                 {
