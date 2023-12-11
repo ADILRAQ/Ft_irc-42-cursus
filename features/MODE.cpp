@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 16:54:05 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 17:41:00 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,13 @@ void    Cmd::MODE()
         }
         j--;
     }
-    if (!done)
+    if (!done || holder1.size() == 1 || (holder1.size() == 2 && holder1[1] == '-'))
         return ;
+    if (holder1[0] == '+' && holder1[1] == '-')
+        holder1.erase(holder1.begin());
+    if (holder1[holder1.length() - 1] == '-')
+        holder1.erase(holder1.end() - 1);
+    
     data.second.erase(data.second.begin() + 1, data.second.end());
     data.second.push_back(holder1 + " " + holder2);
 
