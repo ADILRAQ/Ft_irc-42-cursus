@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Cmd.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:05 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/10 09:14:42 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:30:21 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"Cmd.hpp"
 
-Cmd::Cmd(cmdInfos& obj, int& fd, string &passwd, string &hst) : data(obj) , CurrentClientFD(fd), pass(passwd), host(hst)
+Cmd::Cmd(cmdInfos& obj, int& fd, std::string &passwd, std::string &hst) : data(obj) , CurrentClientFD(fd), pass(passwd), host(hst)
 {
 
 }
@@ -36,21 +36,21 @@ void Cmd::BeginExec(int i)
         if (Client::getClient()[CurrentClientFD].first < 3 && i != 9 && i != 10)
             ++Client::getClient()[CurrentClientFD].first;
     }
-    catch(const exception& e)
+    catch(const std::exception& e)
     {
         _send(CurrentClientFD, e.what());
     }
 }
 
-void    Cmd::executeCmd(const string & nick)
+void    Cmd::executeCmd(const std::string & nick)
 {
     ClientInfos& CurrentClient = Client::getClient();
-    string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "QUIT", "PART", "NOTICE", "BOT"};
+    std::string Which[] = {"PASS", "NICK", "USER", "JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "QUIT", "PART", "NOTICE", "BOT"};
 
     if (data.first.empty())
     {
         data.first = "QUIT";
-        vector<string> keeP;
+        std::vector<std::string> keeP;
         keeP.push_back("Leaving...");
         data.second = keeP;
         BeginExec(9);
@@ -64,7 +64,7 @@ void    Cmd::executeCmd(const string & nick)
     if (j < 3 && Which[j] == data.first)
         BeginExec(j);
     else if (j < 3 && Which[j] != data.first)
-       _send(CurrentClientFD, ": 451 :You have not registered in the right process\r\n");
+        _send(CurrentClientFD, ": 451 :You have not registered in the right process\r\n");
     else
     {
         for (int i = 0; i < 13; i++)

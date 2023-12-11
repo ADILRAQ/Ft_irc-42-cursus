@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 13:59:11 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:26:31 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ Server::Server(std::string const &port) : Address(NULL)
 		perror(COLOR_RED "Socket " COLOR_RESET);
 		throw -1;
 	}
-	Sockaddr_in	*ptr = (Sockaddr_in *)Address->ai_addr;
-	std::cout << std::endl;
 	help.events = POLLIN;
 	help.revents = 0;
 	Sockets.push_back(help);
@@ -83,7 +81,6 @@ short	Server::getRevents(size_t i)
 
 std::string	&Server::getRequest(size_t i)
 {
-	std::cout << "I: " << (i - 1) << std::endl;
 	return (Request[i - 1]);
 }
 

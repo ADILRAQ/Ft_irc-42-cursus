@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:42 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 10:16:22 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 13:51:30 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void    Cmd::TOPIC()
 {
-    string& nick = Client::getClient()[CurrentClientFD].second.first;
+    std::string& nick = Client::getClient()[CurrentClientFD].second.first;
     unsigned int ChannelIndex, sz = checkTopic(data.second, nick);
-    vector<Chan>&    CurrentChannels = Channel::getChannel();
+    std::vector<Chan>&    CurrentChannels = Channel::getChannel();
     bool IsOper;
 
     try   
@@ -28,28 +28,28 @@ void    Cmd::TOPIC()
             IsOper = false;
         IsInChannel(CurrentChannels[ChannelIndex], CurrentClientFD, IsOper);
     }
-    catch (const exception & e)
+    catch (const std::exception & e)
     {
-        throw runtime_error(e.what());
+        throw std::runtime_error(e.what());
     }
 
     if (sz == 1)
     {
         if ((CurrentChannels[ChannelIndex].getTopic()).empty())
-            throw runtime_error(": 331 " + nick + " " + data.second[0] + " :No topic is set\r\n");
+            throw std::runtime_error(": 331 " + nick + " " + data.second[0] + " :No topic is set\r\n");
         else
             _send(CurrentClientFD, ": 332 " + nick + " " + data.second[0] + " :" + CurrentChannels[ChannelIndex].getTopic() + "\r\n");
     }
     else
     {
         if (CurrentChannels[ChannelIndex].getModes()['t'].first && !CurrentChannels[ChannelIndex].getMembers()[nick].second)
-            throw runtime_error(": 482 " + nick + " " + data.second[0] + " :You're not channel operator\r\n");
+            throw std::runtime_error(": 482 " + nick + " " + data.second[0] + " :You're not channel operator\r\n");
         Channel::getChannel()[ChannelIndex].setTopic(data.second[1]);
-		map<int, string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
-		map<int, string>::iterator it = var.begin();
-		map<int, string>::iterator ite = var.end();
+		std::map<int, std::string> var = CurrentChannels[ChannelIndex].getMembersFromFD();
+		std::map<int, std::string>::iterator it = var.begin();
+		std::map<int, std::string>::iterator ite = var.end();
 
-		for (map<int, string>::iterator t = it; t != ite; t++)
+		for (std::map<int, std::string>::iterator t = it; t != ite; t++)
 			serverReplyFormat(t->first, Client::getClient()[CurrentClientFD].second, data);
     }
 }

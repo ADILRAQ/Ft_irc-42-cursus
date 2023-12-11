@@ -6,15 +6,15 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:58 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/09 13:17:57 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 13:46:27 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include"header.hpp"
+#include"MainHeader.hpp"
 
-typedef map<int, pair<int , pair<string, string> > > ClientInfos;
+typedef std::map<int, std::pair<int , std::pair<std::string, std::string> > > ClientInfos;
 
 class Client
 {
@@ -25,6 +25,6 @@ public:
         Client();
         ~Client();
 
-        static void setClient(int fd, string nick, string user);
+        static void setClient(int fd, std::string nick, std::string user);
         static ClientInfos & getClient();
 };
