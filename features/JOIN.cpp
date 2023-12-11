@@ -6,7 +6,7 @@
 /*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:23 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 13:51:40 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 15:34:03 by fraqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void    Cmd::JOIN()
         throw std::runtime_error(": 475 " + nick + " :Cannot join channel (+k)\r\n");
     if (keep['i'].first && find(currentChannel.getInviteD().begin(), currentChannel.getInviteD().end(), nick) == currentChannel.getInviteD().end())
         throw std::runtime_error(": 473 " + nick + " :This channel is invite only\r\n");
-    if (keep['l'].first && currentChannel.getMembersFromFD().size() >= currentChannel.getLimit())
+    if (find(currentChannel.getInviteD().begin(), currentChannel.getInviteD().end(), nick) == currentChannel.getInviteD().end() && (keep['l'].first && currentChannel.getMembersFromFD().size() >= currentChannel.getLimit()))
         throw std::runtime_error(": 471 " + nick + " :Channel is full\r\n");
 
     currentChannel.setMember(nick, CurrentClientFD);

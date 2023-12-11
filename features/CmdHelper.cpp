@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 14:21:53 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/11 16:20:19 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void    checkParamsNick(const std::vector<std::string> & vc)
         throw std::runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
     for (; i < vc[0].length(); i++)
         if (!(isalnum(vc[0][i]) || vc[0][i] == '_' || vc[0][i] == '-'))
-            throw std::runtime_error(": 432" + vc[0] + " :Erroneous Nickname\r\n");
+            throw std::runtime_error(": 432 " + vc[0] + " :Erroneous Nickname\r\n");
 
     if (i > 9)
         throw std::runtime_error(": 432 " + vc[0] + " :Erroneous Nickname\r\n");
