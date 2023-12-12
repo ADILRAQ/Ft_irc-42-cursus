@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:29 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 16:56:37 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:53:30 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void    Cmd::MODE()
                 if (vc[1][j] != 'i' && vc[1][j] != 't' && vc[1][j] != 'k' && vc[1][j] != 'o' && vc[1][j] != 'l')
                     {_send(CurrentClientFD, ": 472 " + nick + " " + vc[1][j] + " :is unknown mode char to me\r\n"); continue;}
                 if ((vc[1][j] == 'o' || (Set && (vc[1][j] == 'k' || vc[1][j] == 'l'))) && vc[index].empty())
-                    {std::cout << vc[1][j] << " " << index << std::endl;_send(CurrentClientFD, ": 696 " + nick + " :MODE You must specify a parameter for the mode flag\r\n"); index++; continue;}
+                    {_send(CurrentClientFD, ": 696 " + nick + " :MODE You must specify a parameter for the mode flag\r\n"); index++; continue;}
                 if (Set && vc[1][j] == 'k')
                 {
                     if (CurrentChannels[ChannelIndex].getModes()['k'].first)
@@ -117,8 +117,13 @@ void    Cmd::MODE()
         }
         j--;
     }
-    if (!done)
+    if (!done || holder1.size() == 1 || (holder1.size() == 2 && holder1[1] == '-'))
         return ;
+    if (holder1[0] == '+' && holder1[1] == '-')
+        holder1.erase(holder1.begin());
+    if (holder1[holder1.length() - 1] == '-')
+        holder1.erase(holder1.end() - 1);
+    
     data.second.erase(data.second.begin() + 1, data.second.end());
     data.second.push_back(holder1 + " " + holder2);
 

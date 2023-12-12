@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRC.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 10:06:32 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 14:07:53 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:51:53 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ static int	Port(char *str)
 	{
 		if (!isdigit(str[i]))
 		{
-			std::cout << "Error: Bad port format" << std::endl;
+			std::cout << COLOR_RED << "Error: Bad port format" << COLOR_RESET << std::endl;
 			return (0);
 		}
 	}
 	ss >> port;
 	if (port < 1024 || port > 65535)
 	{
-		std::cout << "Error: Bad port format" << std::endl;
+		std::cout << COLOR_RED << "Error: Bad port format" << COLOR_RESET << std::endl;
 		return (0);
 	}
 	return (1);
@@ -43,14 +43,14 @@ static int	Password(char *str)
 
 	if (!str[i + 1])
 	{
-		std::cout << "Error: Bad pswd format" << std::endl;
+		std::cout << COLOR_RED << "Error: Bad pswd format" << COLOR_RESET << std::endl;
 		return (0);
 	}
 	while (str[++i])
 	{
 		if (!isalpha(str[i]))
 		{
-			std::cout << "Error: Bad port format" << std::endl;
+			std::cout << COLOR_RED << "Error: Bad pswd format" << COLOR_RESET << std::endl;
 			return (0);
 		}
 	}
@@ -81,6 +81,6 @@ int	main(int ac, char **av)
 		}
 	}
 	else
-		std::cout << "Error: NB of args" << std::endl;
+		std::cout << COLOR_RED << "Error: NB of args" << COLOR_RESET << std::endl;
 	return (1);
 }

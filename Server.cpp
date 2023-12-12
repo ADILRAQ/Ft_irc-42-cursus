@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 09:50:49 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 14:26:31 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:55:38 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ void	Server::SBind(void)
 	int	reuseaddr = 1;
 
 	if (setsockopt(Sockets[0].fd, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr)))
-		std::cout << "RESUSE: " << strerror(errno) << std::endl;
+	{
+		perror(COLOR_RED "setsockopt " COLOR_RESET);
+		throw (-1);
+	}
 
 	if (bind(Sockets[0].fd, Address->ai_addr, Address->ai_addrlen) < 0)
 	{
@@ -132,7 +135,6 @@ void	Server::SAccept(void)
 		throw (-1);
 	}
 	help.fd = newSocket;
-	std::cout << COLOR_GREEN << "NewSocket: " << help.fd << "   IP: " << inet_ntoa(inData.sin_addr) << ":" << ntohs(inData.sin_port) << COLOR_RESET << std::endl;
 	std::string	IPaddr(inet_ntoa(inData.sin_addr));
 	help.events = POLLIN;
 	help.revents = 0;
@@ -143,7 +145,6 @@ void	Server::SAccept(void)
 
 void	Server::SClose(size_t i)
 {
-	std::cout << COLOR_RED << "Close: " << Sockets[i].fd << "   IP: " << SockAddrInfo[i - 1] << COLOR_RESET << std::endl;
 	close(Sockets[i].fd);
 	Sockets.erase(Sockets.begin() + i);
 	SockAddrInfo.erase(SockAddrInfo.begin() + i - 1);

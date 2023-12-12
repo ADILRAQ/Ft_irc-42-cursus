@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fraqioui <fraqioui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:17:22 by araqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 14:15:45 by fraqioui         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:53:03 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ static std::string const	getCityName(std::vector<std::string> &city)
 static std::string const	makeRequest(std::string const &cityName)
 {
 	std::ostringstream	request;
-
-	std::cout << COLOR_YELLOW << "City: " << cityName << COLOR_RESET << std::endl;
 
 	request << "GET " << API_PATH << "?key=" << API_KEY << "&q=" << cityName << " HTTP/1.1\r\n";
     request << "Host: " << API_HOST << "\r\n";
@@ -113,7 +111,6 @@ void	Cmd::BOT()
 		}
 		else
 			message = ":" + getValue(help, "\"message\":");
-		std::cout << COLOR_GREEN << message << COLOR_RESET << std::endl;
 		/****** sending ********/
 		std::string & nick = Client::getClient()[CurrentClientFD].second.first;
 		std::string & user = Client::getClient()[CurrentClientFD].second.second;

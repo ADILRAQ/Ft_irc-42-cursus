@@ -6,7 +6,7 @@
 /*   By: araqioui <araqioui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:14:18 by fraqioui          #+#    #+#             */
-/*   Updated: 2023/12/11 16:56:29 by araqioui         ###   ########.fr       */
+/*   Updated: 2023/12/12 09:49:22 by araqioui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,6 @@ cmdInfos    placeParams(std::string & cmd)
         check++;
     }
     params.second = save;
-    std::cout << "********** print data **********\n";
-    std::cout << "cmd: " << params.first << '\n';
-    for (unsigned int i(0); i < params.second.size(); i++)
-        std::cout << '\"' << params.second[i] << "\" ";
-    std::cout << "\n********** End **********\n";
     return params;
 }
 
