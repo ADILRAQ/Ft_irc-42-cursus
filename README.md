@@ -1,6 +1,6 @@
 # IRC Server Project
 ## Summary
-This project involves creating your own IRC (Internet Relay Chat) server. You will use an actual IRC client to connect to your server and test its functionality. IRC is a text-based communication protocol that enables real-time messaging, which can be public or private, and allows users to exchange direct messages and join group channels.
+This project involves creating your own IRC (Internet Relay Chat) server in C++. You will use an actual IRC client to connect to your server and test its functionality. IRC is a text-based communication protocol that enables real-time messaging, which can be public or private, and allows users to exchange direct messages and join group channels.
 
 ## Mandatory Features
 * __Program name:__ `ircserv`
